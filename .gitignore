@@ -15,6 +15,7 @@ web/dist/**/*
 node_modules/
 
 /.idea/
+/web/.idea/
 /semaphore.iml
 /bin/
 

@@ -278,7 +278,7 @@
                 <v-switch
                   v-model="darkMode"
                   inset
-                  label="Dark Mode"
+                  label="夜间模式"
                   persistent-hint
                 ></v-switch>
               </v-list-item>
