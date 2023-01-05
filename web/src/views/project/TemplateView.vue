@@ -19,7 +19,7 @@
       :max-width="700"
       v-model="editDialog"
       save-button-text="Save"
-      title="Edit Template"
+      title="编辑模板"
       @save="loadData()"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
@@ -38,7 +38,7 @@
       :max-width="700"
       v-model="copyDialog"
       save-button-text="Create"
-      title="New Template"
+      title="创建新模板"
       @save="onTemplateCopied"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
@@ -77,7 +77,7 @@
               ? `/project/${projectId}/views/${viewId}/templates/`
               : `/project/${projectId}/templates/`"
         >
-          Task Templates
+          任务模板
         </router-link>
         <v-icon>mdi-chevron-right</v-icon>
         <span class="breadcrumbs__item">{{ item.name }}</span>

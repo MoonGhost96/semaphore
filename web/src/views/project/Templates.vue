@@ -30,7 +30,7 @@
       :max-width="700"
       v-model="editDialog"
       save-button-text="Create"
-      title="New template"
+      title="创建任务模板"
       @save="loadItems()"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
@@ -58,7 +58,7 @@
     <v-toolbar flat>
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
       <v-toolbar-title>
-        Task Templates
+        任务模板
         <!--
         <v-btn-toggle class="ml-4" rounded>
           <v-btn small>
@@ -78,7 +78,7 @@
         color="primary"
         @click="editItem('new')"
         class="mr-1"
-      >New template
+      >创建模板
       </v-btn>
 
       <v-btn icon @click="settingsSheet = true">
