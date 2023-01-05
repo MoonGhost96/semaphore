@@ -85,7 +85,7 @@
 
         <v-text-field
           v-model="username"
-          label="Username"
+          label="用户名"
           :rules="[v => !!v || 'Username is required']"
           required
           :disabled="signInProcess"
@@ -93,7 +93,7 @@
 
         <v-text-field
           v-model="password"
-          label="Password"
+          label="密码"
           :rules="[v => !!v || 'Password is required']"
           type="password"
           required

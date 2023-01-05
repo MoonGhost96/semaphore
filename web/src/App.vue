@@ -181,7 +181,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>New Project</v-list-item-title>
+            <v-list-item-title>创建新项目</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -205,7 +205,17 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Dashboard</v-list-item-title>
+            <v-list-item-title>仪表盘</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
+        <v-list-item key="commands" :to="`/project/${projectId}/commands`">
+          <v-list-item-icon>
+            <v-icon>mdi-chevron-double-right</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>批量执行</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -215,7 +225,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Task Templates</v-list-item-title>
+            <v-list-item-title>任务模板</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -225,7 +235,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Inventory</v-list-item-title>
+            <v-list-item-title>资产列表</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -235,7 +245,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Environment</v-list-item-title>
+            <v-list-item-title>环境管理</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -255,7 +265,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>仓库</v-list-item-title>
+            <v-list-item-title>仓库管理</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -265,7 +275,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>Team</v-list-item-title>
+            <v-list-item-title>团队管理</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
