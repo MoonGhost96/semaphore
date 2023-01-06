@@ -46,6 +46,12 @@
     />
 
     <v-text-field
+      v-model="item.limit"
+      label="Limit (Optional)"
+      :disabled="formSaving"
+    />
+
+    <v-text-field
       v-for="(v) in template.survey_vars || []"
       :key="v.name"
       :label="v.title"

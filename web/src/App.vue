@@ -209,15 +209,15 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item key="commands" :to="`/project/${projectId}/commands`">
-          <v-list-item-icon>
-            <v-icon>mdi-chevron-double-right</v-icon>
-          </v-list-item-icon>
+<!--        <v-list-item key="commands" :to="`/project/${projectId}/commands`">-->
+<!--          <v-list-item-icon>-->
+<!--            <v-icon>mdi-chevron-double-right</v-icon>-->
+<!--          </v-list-item-icon>-->
 
-          <v-list-item-content>
-            <v-list-item-title>批量执行</v-list-item-title>
-          </v-list-item-content>
-        </v-list-item>
+<!--          <v-list-item-content>-->
+<!--            <v-list-item-title>批量执行</v-list-item-title>-->
+<!--          </v-list-item-content>-->
+<!--        </v-list-item>-->
 
         <v-list-item key="templates" :to="templatesUrl">
           <v-list-item-icon>
