@@ -19,27 +19,27 @@
     </EditDialog>
 
     <ObjectRefsDialog
-      object-title="repository"
+      object-title="仓库"
       :object-refs="itemRefs"
       :project-id="projectId"
       v-model="itemRefsDialog"
     />
 
     <YesNoDialog
-      title="Delete repository"
-      text="Are you really want to delete this repository?"
+      title="删除仓库"
+      text="确定删除?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Repositories</v-toolbar-title>
+      <v-toolbar-title>仓库管理</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New Repository</v-btn>
+      >创建仓库</v-btn>
     </v-toolbar>
 
     <v-data-table

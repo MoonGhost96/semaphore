@@ -55,7 +55,7 @@
     </EditDialog>
 
     <ObjectRefsDialog
-      object-title="template"
+      object-title="任务模板"
       :object-refs="itemRefs"
       :project-id="projectId"
       v-model="itemRefsDialog"

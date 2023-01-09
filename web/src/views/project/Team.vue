@@ -19,20 +19,20 @@
     </EditDialog>
 
     <YesNoDialog
-      title="Delete team member"
-      text="Are you really want to delete the team member?"
+      title="删除团队成员"
+      text="确定删除该团队成员?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Team</v-toolbar-title>
+      <v-toolbar-title>团队管理</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New Team Member</v-btn>
+      >添加团队成员</v-btn>
     </v-toolbar>
 
     <v-data-table

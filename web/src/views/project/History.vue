@@ -3,7 +3,7 @@
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
       <v-toolbar-title>
-        Dashboard
+        仪表盘
         <!--
         <v-btn-toggle class="ml-4" rounded>
           <v-btn small>
@@ -21,9 +21,9 @@
       <v-spacer></v-spacer>
       <div>
         <v-tabs centered>
-          <v-tab key="history" :to="`/project/${projectId}/history`">History</v-tab>
-          <v-tab key="activity" :to="`/project/${projectId}/activity`">Activity</v-tab>
-          <v-tab key="settings" :to="`/project/${projectId}/settings`">Settings</v-tab>
+          <v-tab key="history" :to="`/project/${projectId}/history`">运行历史</v-tab>
+          <v-tab key="activity" :to="`/project/${projectId}/activity`">活动记录</v-tab>
+          <v-tab key="settings" :to="`/project/${projectId}/settings`">项目设置</v-tab>
         </v-tabs>
       </div>
     </v-toolbar>

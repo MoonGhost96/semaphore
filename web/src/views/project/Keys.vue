@@ -21,7 +21,7 @@
     </EditDialog>
 
     <ObjectRefsDialog
-      object-title="access key"
+      object-title="秘钥"
       :object-refs="itemRefs"
       :project-id="projectId"
       v-model="itemRefsDialog"
@@ -36,12 +36,12 @@
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Key Store</v-toolbar-title>
+      <v-toolbar-title>秘钥管理</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New Key</v-btn>
+      >创建秘钥</v-btn>
     </v-toolbar>
 
     <v-data-table

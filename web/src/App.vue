@@ -235,7 +235,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>资产列表</v-list-item-title>
+            <v-list-item-title>资产目录</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 

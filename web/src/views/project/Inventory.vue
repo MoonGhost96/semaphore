@@ -20,27 +20,27 @@
     </EditDialog>
 
     <ObjectRefsDialog
-      object-title="inventory"
+      object-title="资产目录"
       :object-refs="itemRefs"
       :project-id="projectId"
       v-model="itemRefsDialog"
     />
 
     <YesNoDialog
-      title="Delete inventory"
-      text="Are you really want to delete this inventory?"
+      title="删除目录"
+      text="确定删除该目录?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Inventory</v-toolbar-title>
+      <v-toolbar-title>资产目录</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New Inventory</v-btn>
+      >创建目录</v-btn>
     </v-toolbar>
 
     <v-data-table

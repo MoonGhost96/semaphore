@@ -20,27 +20,27 @@
     </EditDialog>
 
     <ObjectRefsDialog
-      object-title="environment"
+      object-title="环境"
       :object-refs="itemRefs"
       :project-id="projectId"
       v-model="itemRefsDialog"
     />
 
     <YesNoDialog
-      title="Delete environment"
-      text="Are you really want to delete this environment?"
+      title="删除环境"
+      text="确定删除?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Environment</v-toolbar-title>
+      <v-toolbar-title>环境变量</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New Environment
+      >创建环境
       </v-btn>
     </v-toolbar>
 

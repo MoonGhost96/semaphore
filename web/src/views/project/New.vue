@@ -2,7 +2,7 @@
   <div>
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>New Project</v-toolbar-title>
+      <v-toolbar-title>新建项目</v-toolbar-title>
       <v-spacer></v-spacer>
     </v-toolbar>
 

@@ -2,20 +2,20 @@
   <div>
     <YesNoDialog
       v-model="deleteProjectDialog"
-      title="Delete project"
-      text="Are you really want to delete this project?"
+      title="删除项目"
+      text="确认删除该项目？该项目相关的内容会全部删除"
       @yes="deleteProject()"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>Dashboard</v-toolbar-title>
+      <v-toolbar-title>仪表盘</v-toolbar-title>
       <v-spacer></v-spacer>
       <div>
         <v-tabs centered>
-          <v-tab key="history" :to="`/project/${projectId}/history`">History</v-tab>
-          <v-tab key="activity" :to="`/project/${projectId}/activity`">Activity</v-tab>
-          <v-tab key="settings" :to="`/project/${projectId}/settings`">Settings</v-tab>
+          <v-tab key="history" :to="`/project/${projectId}/history`">运行历史</v-tab>
+          <v-tab key="activity" :to="`/project/${projectId}/activity`">活动记录</v-tab>
+          <v-tab key="settings" :to="`/project/${projectId}/settings`">项目设置</v-tab>
         </v-tabs>
       </div>
     </v-toolbar>
@@ -36,7 +36,7 @@
         </v-col>
         <v-col class="grow">
           <div style="font-size: 14px; color: #ff5252">
-            Once you delete a project, there is no going back. Please be certain.
+            一旦你删除了一个项目，相关的数据会被一并删除，请确定
           </div>
         </v-col>
       </v-row>
