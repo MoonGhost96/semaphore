@@ -62,8 +62,8 @@
     />
 
     <YesNoDialog
-      title="Delete template"
-      text="Are you really want to delete this template?"
+      title="删除任务模板"
+      text="确认删除该模板?"
       v-model="deleteDialog"
       @yes="remove()"
     />

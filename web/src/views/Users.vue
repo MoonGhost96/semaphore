@@ -19,8 +19,8 @@
     </EditDialog>
 
     <YesNoDialog
-      title="Delete user"
-      text="Are you really want to delete this user?"
+      title="删除用户"
+      text="确认删除该用户?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />

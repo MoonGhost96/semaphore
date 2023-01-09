@@ -28,8 +28,8 @@
     />
 
     <YesNoDialog
-      title="Delete key"
-      text="Are you really want to delete this key?"
+      title="删除秘钥"
+      text="确认删除该秘钥?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />

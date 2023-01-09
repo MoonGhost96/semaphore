@@ -3,7 +3,7 @@
     <v-alert
       type="warning"
     >
-      The {{ objectTitle }} can't be deleted because it used by the resources below
+      该{{ objectTitle }}不能被删除，因为其已被下列资源使用
     </v-alert>
     <div
       v-for="s in sections"

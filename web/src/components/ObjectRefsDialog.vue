@@ -4,7 +4,7 @@
     max-width="400"
   >
     <v-card>
-      <v-card-title class="headline">Can't delete the {{ objectTitle }}</v-card-title>
+      <v-card-title class="headline">无法删除该{{ objectTitle }}</v-card-title>
 
       <v-card-text class="pb-0">
         <ObjectRefsView
