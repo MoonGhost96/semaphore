@@ -21,7 +21,7 @@
 
     <v-checkbox
       v-model="item.alert"
-      label="Allow alerts for this project"
+      label="允许该项目发出告警"
     ></v-checkbox>
 
     <v-text-field

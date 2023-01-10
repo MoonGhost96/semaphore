@@ -22,7 +22,7 @@
     <EditDialog
         v-model="userDialog"
         save-button-text="Save"
-        title="Edit User"
+        title="编辑用户信息"
         v-if="user"
         event-name="i-user"
     >
@@ -73,7 +73,7 @@
     <EditDialog
         v-model="newProjectDialog"
         save-button-text="Create"
-        title="New Project"
+        title="创建新项目"
         event-name="i-project"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
@@ -168,7 +168,7 @@
             </v-list-item-icon>
 
             <v-list-item-content>
-              New project...
+              创建新项目...
             </v-list-item-content>
           </v-list-item>
         </v-list>
@@ -205,19 +205,9 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>仪表盘</v-list-item-title>
+            <v-list-item-title>仪表盘/Dashboard</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-
-<!--        <v-list-item key="commands" :to="`/project/${projectId}/commands`">-->
-<!--          <v-list-item-icon>-->
-<!--            <v-icon>mdi-chevron-double-right</v-icon>-->
-<!--          </v-list-item-icon>-->
-
-<!--          <v-list-item-content>-->
-<!--            <v-list-item-title>批量执行</v-list-item-title>-->
-<!--          </v-list-item-content>-->
-<!--        </v-list-item>-->
 
         <v-list-item key="templates" :to="templatesUrl">
           <v-list-item-icon>
@@ -225,7 +215,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>任务模板</v-list-item-title>
+            <v-list-item-title>任务模板/Task Templates</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -235,7 +225,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>资产目录</v-list-item-title>
+            <v-list-item-title>资产目录/Inventories</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -245,7 +235,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>环境管理</v-list-item-title>
+            <v-list-item-title>环境管理/Environments</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -255,7 +245,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>秘钥管理</v-list-item-title>
+            <v-list-item-title>秘钥管理/Key Store</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -265,7 +255,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>仓库管理</v-list-item-title>
+            <v-list-item-title>仓库管理/Repositories</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
 
@@ -275,7 +265,7 @@
           </v-list-item-icon>
 
           <v-list-item-content>
-            <v-list-item-title>团队管理</v-list-item-title>
+            <v-list-item-title>团队管理/Team</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -315,7 +305,7 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                Users
+                用户管理
               </v-list-item-content>
             </v-list-item>
 
@@ -325,7 +315,7 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                Edit Account
+                编辑账户
               </v-list-item-content>
             </v-list-item>
 
@@ -366,7 +356,7 @@
               </v-list-item-icon>
 
               <v-list-item-content>
-                Sign Out
+                注销
               </v-list-item-content>
             </v-list-item>
           </v-list>

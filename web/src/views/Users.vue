@@ -3,7 +3,7 @@
     <EditDialog
       v-model="editDialog"
       save-button-text="Save"
-      title="Edit User"
+      title="编辑用户信息"
       @save="loadItems()"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
@@ -33,12 +33,12 @@
       >
         <v-icon>mdi-arrow-left</v-icon>
       </v-btn>
-      <v-toolbar-title>Users</v-toolbar-title>
+      <v-toolbar-title>用户</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >New User</v-btn>
+      >创建用户</v-btn>
     </v-toolbar>
 
     <v-data-table
