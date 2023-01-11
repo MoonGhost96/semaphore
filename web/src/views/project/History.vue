@@ -22,7 +22,7 @@
       <div>
         <v-tabs centered>
           <v-tab key="history" :to="`/project/${projectId}/history`">运行历史</v-tab>
-          <v-tab key="activity" :to="`/project/${projectId}/activity`">活动记录</v-tab>
+          <v-tab key="activity" :to="`/project/${projectId}/activity`">操作记录</v-tab>
           <v-tab key="settings" :to="`/project/${projectId}/settings`">项目设置</v-tab>
         </v-tabs>
       </div>
