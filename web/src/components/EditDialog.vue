@@ -34,7 +34,7 @@ Can use used in tandem with ItemFormBase.js. See KeyForm.vue for example.
           text
           @click="close()"
         >
-          Cancel
+          取消
         </v-btn>
 
         <v-btn

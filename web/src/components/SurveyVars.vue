@@ -52,7 +52,7 @@
             text
             @click="editDialog = false"
           >
-            Cancel
+            取消
           </v-btn>
           <v-btn
             color="blue darken-1"
