@@ -18,7 +18,7 @@
     <EditDialog
       :max-width="700"
       v-model="editDialog"
-      save-button-text="Save"
+      save-button-text="保存"
       title="编辑模板"
       @save="loadData()"
     >
@@ -37,7 +37,7 @@
     <EditDialog
       :max-width="700"
       v-model="copyDialog"
-      save-button-text="Create"
+      save-button-text="创建"
       title="创建新模板"
       @save="onTemplateCopied"
     >

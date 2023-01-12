@@ -29,7 +29,7 @@
     <EditDialog
       :max-width="700"
       v-model="editDialog"
-      save-button-text="Create"
+      save-button-text="创建"
       title="创建任务模板"
       @save="loadItems()"
     >

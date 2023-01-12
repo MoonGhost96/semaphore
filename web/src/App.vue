@@ -2,7 +2,7 @@
   <v-app v-if="state === 'success'" class="app">
     <EditDialog
         v-model="passwordDialog"
-        save-button-text="Save"
+        save-button-text="保存"
         title="Change password"
         v-if="user"
         event-name="i-user"
@@ -21,7 +21,7 @@
 
     <EditDialog
         v-model="userDialog"
-        save-button-text="Save"
+        save-button-text="保存"
         title="编辑用户信息"
         v-if="user"
         event-name="i-user"
@@ -40,7 +40,7 @@
 
     <EditDialog
         v-model="taskLogDialog"
-        save-button-text="Delete"
+        save-button-text="删除"
         :max-width="1000"
         :hide-buttons="true"
         @close="onTaskLogDialogClosed()"
@@ -72,7 +72,7 @@
 
     <EditDialog
         v-model="newProjectDialog"
-        save-button-text="Create"
+        save-button-text="创建"
         title="创建新项目"
         event-name="i-project"
     >

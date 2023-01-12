@@ -2,7 +2,7 @@
   <div v-if="items != null">
     <EditDialog
       v-model="editDialog"
-      save-button-text="Save"
+      save-button-text="保存"
       title="编辑用户信息"
       @save="loadItems()"
     >

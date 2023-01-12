@@ -2,8 +2,8 @@
   <div v-if="items != null">
     <EditDialog
       v-model="editDialog"
-      :save-button-text="itemId === 'new' ? 'Create' : 'Save'"
-      :title="`${itemId === 'new' ? 'New' : 'Edit'} Inventory`"
+      :save-button-text="itemId === 'new' ? '创建' : '保存'"
+      :title="`${itemId === 'new' ? '创建' : '编辑'}资产目录`"
       :max-width="450"
       @save="loadItems"
     >

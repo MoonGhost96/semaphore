@@ -2,8 +2,8 @@
   <div v-if="items != null && keys != null">
     <EditDialog
       v-model="editDialog"
-      :save-button-text="itemId === 'new' ? 'Create' : 'Save'"
-      :title="`${itemId === 'new' ? 'New' : 'Edit'} Repository`"
+      :save-button-text="itemId === 'new' ? '创建' : '保存'"
+      :title="`${itemId === 'new' ? 'New' : '编辑'}仓库`"
       @save="loadItems()"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">

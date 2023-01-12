@@ -2,7 +2,7 @@
   <div v-if="items != null">
     <EditDialog
       v-model="editDialog"
-      save-button-text="Save"
+      save-button-text="保存"
       title="Edit Environment"
       :max-width="500"
       @save="loadItems"
