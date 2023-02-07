@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"github.com/google/go-github/github"
 	"io"
 	"net/url"
@@ -392,11 +393,11 @@ func (conf *ConfigType) PrintDbInfo() {
 	}
 	switch dialect {
 	case DbDriverMySQL:
-		fmt.Printf("MySQL %v@%v %v\n", conf.MySQL.GetUsername(), conf.MySQL.GetHostname(), conf.MySQL.GetDbName())
+		log.Printf("MySQL %v@%v %v\n", conf.MySQL.GetUsername(), conf.MySQL.GetHostname(), conf.MySQL.GetDbName())
 	case DbDriverBolt:
-		fmt.Printf("BoltDB %v\n", conf.BoltDb.GetHostname())
+		log.Printf("BoltDB %v\n", conf.BoltDb.GetHostname())
 	case DbDriverPostgres:
-		fmt.Printf("Postgres %v@%v %v\n", conf.Postgres.GetUsername(), conf.Postgres.GetHostname(), conf.Postgres.GetDbName())
+		log.Printf("Postgres %v@%v %v\n", conf.Postgres.GetUsername(), conf.Postgres.GetHostname(), conf.Postgres.GetDbName())
 	default:
 		panic(fmt.Errorf("database configuration not found"))
 	}

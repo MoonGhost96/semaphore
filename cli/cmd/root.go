@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	log "github.com/Sirupsen/logrus"
 	"github.com/ansible-semaphore/semaphore/api"
 	"github.com/ansible-semaphore/semaphore/api/sockets"
@@ -34,7 +33,7 @@ Complete documentation is available at https://ansible-semaphore.com.`,
 func Execute() {
 	rootCmd.PersistentFlags().StringVar(&configPath, "config", "", "Configuration file path")
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Error(os.Stderr, err)
 		os.Exit(1)
 	}
 }
@@ -48,10 +47,10 @@ func runService() {
 
 	util.Config.PrintDbInfo()
 
-	fmt.Printf("Tmp Path (projects home) %v\n", util.Config.TmpPath)
-	fmt.Printf("Semaphore %v\n", util.Version)
-	fmt.Printf("Interface %v\n", util.Config.Interface)
-	fmt.Printf("Port %v\n", util.Config.Port)
+	log.Printf("Tmp Path (projects home) %v\n", util.Config.TmpPath)
+	log.Printf("Semaphore %v\n", util.Version)
+	log.Printf("Interface %v\n", util.Config.Interface)
+	log.Printf("Port %v\n", util.Config.Port)
 
 	go sockets.StartWS()
 	go schedulePool.Run()
@@ -73,7 +72,7 @@ func runService() {
 	router = handlers.ProxyHeaders(router)
 	http.Handle("/", router)
 
-	fmt.Println("Server is running")
+	log.Println("Server is running")
 
 	if store.PermanentConnection() {
 		defer store.Close("root")
