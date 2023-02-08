@@ -42,7 +42,7 @@ func ProjectMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// MustBeAdmin ensures that the user has administrator rights
+// MustBeAdmin ensures that the user has administrator rights (project or system)
 func MustBeAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		project := context.Get(r, "project").(db.Project)
@@ -61,15 +61,17 @@ func MustBeAdmin(next http.Handler) http.Handler {
 		}
 
 		if !projectUser.Admin {
-			w.WriteHeader(http.StatusForbidden)
-			return
+			sysUser, err := helpers.Store(r).GetUser(user.ID)
+			if err != nil || !sysUser.Admin {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
 		}
-
 		next.ServeHTTP(w, r)
 	})
 }
 
-//GetProject returns a project details
+// GetProject returns a project details
 func GetProject(w http.ResponseWriter, r *http.Request) {
 	helpers.WriteJSON(w, http.StatusOK, context.Get(r, "project"))
 }
