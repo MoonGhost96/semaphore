@@ -74,7 +74,8 @@
         v-model="signInFormValid"
         style="width: 300px; height: 300px;"
       >
-        <h3 class="text-center mb-8">SEMAPHORE</h3>
+        <h2 class="text-center mb-8">ANSIBLE-SEMAPHORE</h2>
+        <h2 class="text-center mb-8">自动化运维工具</h2>
 
         <v-alert
           :value="signInError != null"
@@ -84,9 +85,11 @@
         </v-alert>
 
         <v-text-field
+          readonly
+          onfocus="this.removeAttribute('readonly')"
           v-model="username"
           label="用户名"
-          :rules="[v => !!v || 'Username is required']"
+          :rules="[v => !!v || '用户名为必填项']"
           required
           :disabled="signInProcess"
         ></v-text-field>
@@ -94,7 +97,7 @@
         <v-text-field
           v-model="password"
           label="密码"
-          :rules="[v => !!v || 'Password is required']"
+          :rules="[v => !!v || '密码为必填项']"
           type="password"
           required
           :disabled="signInProcess"
@@ -108,11 +111,11 @@
           :disabled="signInProcess"
           block
         >
-          Sign In
+          登录
         </v-btn>
 
         <div class="text-center mt-6">
-          <a @click="loginHelpDialog = true">Don't have account or can't sign in?</a>
+          <a @click="loginHelpDialog = true" style="color: cornflowerblue">无法登录?</a>
         </div>
       </v-form>
     </v-container>
@@ -121,6 +124,9 @@
 <style lang="scss">
 .auth {
   height: 100vh;
+  background-image: url("~@/assets/background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 </style>
 <script>
