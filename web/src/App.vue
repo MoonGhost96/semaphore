@@ -852,6 +852,8 @@ export default {
         responseType: 'json',
       })).data;
 
+      localStorage.setItem('userAdmin', this.user.admin);
+
       this.systemInfo = (await axios({
         method: 'get',
         url: '/api/info',

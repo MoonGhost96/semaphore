@@ -126,7 +126,7 @@ export default {
       return 'i-repositories';
     },
     isUserAdmin() {
-      return (this.items.find((x) => x.id === this.userId) || {}).admin;
+      return ((this.items.find((x) => x.id === this.userId) || {}).admin || localStorage.getItem('userAdmin') === 'true');
     },
   },
 };
