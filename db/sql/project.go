@@ -40,6 +40,21 @@ func (d *SqlDb) GetProjects(userID int) (projects []db.Project, err error) {
 	return
 }
 
+func (d *SqlDb) GetAllProjects() (projects []db.Project, err error) {
+	query, args, err := squirrel.Select("p.*").
+		From("project as p").
+		OrderBy("p.name").
+		ToSql()
+
+	if err != nil {
+		return
+	}
+
+	_, err = d.selectAll(&projects, query, args...)
+
+	return
+}
+
 func (d *SqlDb) GetProject(projectID int) (project db.Project, err error) {
 	query, args, err := squirrel.Select("p.*").
 		From("project as p").

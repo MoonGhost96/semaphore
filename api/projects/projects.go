@@ -12,8 +12,21 @@ import (
 // GetProjects returns all projects in this users context
 func GetProjects(w http.ResponseWriter, r *http.Request) {
 	user := context.Get(r, "user").(*db.User)
+	var err error
 
-	projects, err := helpers.Store(r).GetProjects(user.ID)
+	userInfo, err := helpers.Store(r).GetUser(user.ID)
+	if err != nil {
+		helpers.WriteError(w, err)
+		return
+	}
+
+	var projects []db.Project
+
+	if userInfo.Admin {
+		projects, err = helpers.Store(r).GetAllProjects()
+	} else {
+		projects, err = helpers.Store(r).GetProjects(user.ID)
+	}
 
 	if err != nil {
 		helpers.WriteError(w, err)

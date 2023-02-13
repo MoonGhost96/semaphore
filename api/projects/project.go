@@ -22,12 +22,20 @@ func ProjectMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		// check if user it project's team
-		_, err = helpers.Store(r).GetProjectUser(projectID, user.ID)
-
+		userInfo, err := helpers.Store(r).GetUser(user.ID)
 		if err != nil {
 			helpers.WriteError(w, err)
 			return
+		}
+
+		// check if user in project team
+		if !userInfo.Admin {
+			_, err = helpers.Store(r).GetProjectUser(projectID, user.ID)
+
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
 		}
 
 		project, err := helpers.Store(r).GetProject(projectID)

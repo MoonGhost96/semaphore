@@ -143,6 +143,7 @@ type Store interface {
 
 	GetProject(projectID int) (Project, error)
 	GetProjects(userID int) ([]Project, error)
+	GetAllProjects() ([]Project, error)
 	CreateProject(project Project) (Project, error)
 	DeleteProject(projectID int) error
 	UpdateProject(project Project) error
