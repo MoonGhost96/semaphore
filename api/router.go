@@ -2,11 +2,13 @@ package api
 
 import (
 	"fmt"
+	log "github.com/Sirupsen/logrus"
 	"github.com/ansible-semaphore/semaphore/api/helpers"
 	"github.com/ansible-semaphore/semaphore/db"
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"github.com/ansible-semaphore/semaphore/api/projects"
 	"github.com/ansible-semaphore/semaphore/api/sockets"
@@ -16,6 +18,19 @@ import (
 )
 
 var publicAssets2 = packr.NewBox("../web/dist")
+
+func LogMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		start := time.Now()
+		log.Printf(
+			r.Method,
+			r.RequestURI,
+			r.Host,
+			time.Since(start),
+		)
+		next.ServeHTTP(w, r)
+	})
+}
 
 func StoreMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -79,7 +94,7 @@ func Route() *mux.Router {
 
 	publicAPIRouter := r.PathPrefix(webPath + "api").Subrouter()
 
-	publicAPIRouter.Use(StoreMiddleware, JSONMiddleware)
+	publicAPIRouter.Use(StoreMiddleware, JSONMiddleware, LogMiddleware)
 
 	publicAPIRouter.HandleFunc("/auth/login", login).Methods("POST")
 	publicAPIRouter.HandleFunc("/auth/logout", logout).Methods("POST")
@@ -90,7 +105,7 @@ func Route() *mux.Router {
 
 	authenticatedAPI := r.PathPrefix(webPath + "api").Subrouter()
 
-	authenticatedAPI.Use(StoreMiddleware, JSONMiddleware, authentication)
+	authenticatedAPI.Use(StoreMiddleware, JSONMiddleware, authentication, LogMiddleware)
 
 	authenticatedAPI.Path("/info").HandlerFunc(getSystemInfo).Methods("GET", "HEAD")
 
