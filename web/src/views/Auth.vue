@@ -1,5 +1,5 @@
 <template>
-  <div class="auth">
+  <div class="auth" :style="{backgroundImage: 'url(' + backImage + ')'}">
     <v-dialog v-model="loginHelpDialog" max-width="600">
       <v-card>
         <v-card-title>
@@ -124,7 +124,6 @@
 <style lang="scss">
 .auth {
   height: 100vh;
-  background-image: url("~@/assets/background.jpg");
   background-size: cover;
   background-repeat: no-repeat;
 }
@@ -144,12 +143,20 @@ export default {
       username: null,
 
       loginHelpDialog: null,
+      backImage: null,
     };
   },
 
   async created() {
     if (this.isAuthenticated()) {
       document.location = document.baseURI;
+    }
+    if (this.$vuetify.theme.dark) {
+      // eslint-disable-next-line global-require
+      this.backImage = require('../assets/backgrounddark.jpg');
+    } else {
+      // eslint-disable-next-line global-require
+      this.backImage = require('../assets/background.jpg');
     }
   },
 
