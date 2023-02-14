@@ -22,14 +22,8 @@ func ProjectMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		userInfo, err := helpers.Store(r).GetUser(user.ID)
-		if err != nil {
-			helpers.WriteError(w, err)
-			return
-		}
-
-		// check if user in project team
-		if !userInfo.Admin {
+		if !user.Admin {
+			// check if user it project's team
 			_, err = helpers.Store(r).GetProjectUser(projectID, user.ID)
 
 			if err != nil {
@@ -50,36 +44,36 @@ func ProjectMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// MustBeAdmin ensures that the user has administrator rights (project or system)
+// MustBeAdmin ensures that the user has administrator rights
 func MustBeAdmin(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		project := context.Get(r, "project").(db.Project)
 		user := context.Get(r, "user").(*db.User)
 
-		projectUser, err := helpers.Store(r).GetProjectUser(project.ID, user.ID)
+		if !user.Admin {
+			projectUser, err := helpers.Store(r).GetProjectUser(project.ID, user.ID)
 
-		if err == db.ErrNotFound {
-			w.WriteHeader(http.StatusForbidden)
-			return
-		}
+			if err == db.ErrNotFound {
+				w.WriteHeader(http.StatusForbidden)
+				return
+			}
 
-		if err != nil {
-			helpers.WriteError(w, err)
-			return
-		}
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
 
-		if !projectUser.Admin {
-			sysUser, err := helpers.Store(r).GetUser(user.ID)
-			if err != nil || !sysUser.Admin {
+			if !projectUser.Admin {
 				w.WriteHeader(http.StatusForbidden)
 				return
 			}
 		}
+		
 		next.ServeHTTP(w, r)
 	})
 }
 
-// GetProject returns a project details
+//GetProject returns a project details
 func GetProject(w http.ResponseWriter, r *http.Request) {
 	helpers.WriteJSON(w, http.StatusOK, context.Get(r, "project"))
 }
