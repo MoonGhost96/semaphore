@@ -42,7 +42,7 @@ func (d *BoltDb) GetProjects(userID int) (projects []db.Project, err error) {
 }
 
 func (d *BoltDb) GetAllProjects() (projects []db.Project, err error) {
-	projects = nil
+	err = d.getObjects(0, db.ProjectProps, db.RetrieveQueryParams{}, nil, &projects)
 	return
 }
 
