@@ -219,6 +219,16 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item key="playbooks" :to="`/project/${projectId}/playbooks`">
+          <v-list-item-icon>
+            <v-icon>mdi-book-open-page-variant-outline</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>剧本管理/Playbooks</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item key="inventory" :to="`/project/${projectId}/inventory`">
           <v-list-item-icon>
             <v-icon>mdi-monitor-multiple</v-icon>
