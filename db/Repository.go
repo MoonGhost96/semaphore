@@ -15,6 +15,7 @@ const (
 	RepositoryGit   RepositoryType = "git"
 	RepositorySSH   RepositoryType = "ssh"
 	RepositoryHTTPS RepositoryType = "https"
+	RepositoryHTTP  RepositoryType = "http"
 	RepositoryFile  RepositoryType = "file"
 	RepositoryLocal RepositoryType = "local"
 )
@@ -75,7 +76,7 @@ func (r Repository) GetFullPath(templateID int) string {
 func (r Repository) GetGitURL() string {
 	url := r.GitURL
 
-	if r.GetType() == RepositoryHTTPS {
+	if r.GetType() == RepositoryHTTPS || r.GetType() == RepositoryHTTP {
 		auth := ""
 		switch r.SSHKey.Type {
 		case AccessKeyLoginPassword:
@@ -84,7 +85,11 @@ func (r Repository) GetGitURL() string {
 		if auth != "" {
 			auth += "@"
 		}
-		url = "https://" + auth + r.GitURL[8:]
+		if r.GetType() == RepositoryHTTPS {
+			url = "https://" + auth + r.GitURL[8:]
+		} else {
+			url = "http://" + auth + r.GitURL[7:]
+		}
 	}
 
 	return url
