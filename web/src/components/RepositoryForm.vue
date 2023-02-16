@@ -35,7 +35,7 @@
     <div class="mt-1 mb-4">
       <span class="caption">git:</span>
       <v-chip
-        v-for="x in ['ssh', 'https', 'file', 'git']"
+        v-for="x in ['ssh', 'https', 'file', 'git', 'http']"
         x-small
         class="ml-1"
         :color="type ===x ? 'primary' : ''"
@@ -87,7 +87,7 @@
             <p>Credentials to access to the Git repository. It should be:</p>
             <ul>
               <li><code>SSH</code> if you use Git or SSH URL.</li>
-              <li><code>None</code> if you use HTTPS or file URL.</li>
+              <li><code>None</code> if you use HTTPS, HTTP or file URL.</li>
             </ul>
           </div>
         </v-tooltip>
@@ -148,7 +148,7 @@ export default {
         return 'ssh';
       }
 
-      if (!['git', 'file', 'ssh', 'https'].includes(m[1])) {
+      if (!['git', 'file', 'ssh', 'https', 'http'].includes(m[1])) {
         return null;
       }
 
