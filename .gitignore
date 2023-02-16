@@ -31,3 +31,4 @@ util/version.go
 
 .vscode
 __debug_bin*
+output/*
