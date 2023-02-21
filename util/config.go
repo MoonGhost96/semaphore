@@ -393,11 +393,11 @@ func (conf *ConfigType) PrintDbInfo() {
 	}
 	switch dialect {
 	case DbDriverMySQL:
-		log.Printf("MySQL %v@%v %v\n", conf.MySQL.GetUsername(), conf.MySQL.GetHostname(), conf.MySQL.GetDbName())
+		log.Printf("MySQL %v@%v %v", conf.MySQL.GetUsername(), conf.MySQL.GetHostname(), conf.MySQL.GetDbName())
 	case DbDriverBolt:
-		log.Printf("BoltDB %v\n", conf.BoltDb.GetHostname())
+		log.Printf("BoltDB %v", conf.BoltDb.GetHostname())
 	case DbDriverPostgres:
-		log.Printf("Postgres %v@%v %v\n", conf.Postgres.GetUsername(), conf.Postgres.GetHostname(), conf.Postgres.GetDbName())
+		log.Printf("Postgres %v@%v %v", conf.Postgres.GetUsername(), conf.Postgres.GetHostname(), conf.Postgres.GetDbName())
 	default:
 		panic(fmt.Errorf("database configuration not found"))
 	}

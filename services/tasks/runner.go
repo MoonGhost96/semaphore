@@ -373,24 +373,30 @@ func (t *TaskRunner) populateDetails() error {
 		return t.prepareError(err, "Template Inventory not found!")
 	}
 
-	// get repository
-	t.repository, err = t.pool.store.GetRepository(t.template.ProjectID, t.template.RepositoryID)
+	if t.template.RepositoryID != 0 {
+		// get repository
+		t.repository, err = t.pool.store.GetRepository(t.template.ProjectID, t.template.RepositoryID)
+	}
 
 	if err != nil {
 		return err
 	}
 
-	err = t.repository.SSHKey.DeserializeSecret()
-	if err != nil {
-		return err
+	if t.repository.SSHKeyID != 0 {
+		err = t.repository.SSHKey.DeserializeSecret()
+		if err != nil {
+			return err
+		}
 	}
 
 	// get environment
-	if t.template.EnvironmentID != nil {
+	if t.template.EnvironmentID != nil && *t.template.EnvironmentID != 0 {
 		t.environment, err = t.pool.store.GetEnvironment(t.template.ProjectID, *t.template.EnvironmentID)
 		if err != nil {
 			return err
 		}
+	} else {
+		t.environment.JSON = "{}"
 	}
 
 	if t.task.Environment != "" {
@@ -420,7 +426,6 @@ func (t *TaskRunner) populateDetails() error {
 
 		t.environment.JSON = string(ev)
 	}
-
 	return nil
 }
 
