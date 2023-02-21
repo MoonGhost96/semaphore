@@ -34,7 +34,7 @@
       :items="buildTasks"
       item-value="id"
       :item-text="(itm) => getTaskMessage(itm)"
-      :rules="[v => !!v || 'Build Version is required']"
+      :rules="[v => !!v || 'Build Version 为必填项']"
       required
       :disabled="formSaving"
     />
@@ -59,7 +59,7 @@
       v-model="editedEnvironment[v.name]"
       :required="v.required"
       :rules="[
-          val => !v.required || !!val || v.title + ' is required',
+          val => !v.required || !!val || v.title + ' 为必填项',
           val => !val || v.type !== 'int' || /^\d+$/.test(val) || v.title + ' must be integer',
         ]"
     />

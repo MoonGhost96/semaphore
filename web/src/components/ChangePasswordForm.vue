@@ -16,7 +16,7 @@
       :type="showPassword ? 'text' : 'password'"
       :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
       @click:append="showPassword = !showPassword"
-      :rules="[v => !!v || 'Password is required']"
+      :rules="[v => !!v || 'Password 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>

@@ -14,7 +14,7 @@
     <v-text-field
       v-model="item.name"
       label="Name"
-      :rules="[v => !!v || 'Name is required']"
+      :rules="[v => !!v || 'Name 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>
@@ -22,7 +22,7 @@
     <v-text-field
       v-model="item.username"
       label="Username"
-      :rules="[v => !!v || 'Username is required']"
+      :rules="[v => !!v || 'Username 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>
@@ -30,7 +30,7 @@
     <v-text-field
       v-model="item.email"
       label="Email"
-      :rules="[v => !!v || 'Email is required']"
+      :rules="[v => !!v || 'Email 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>
@@ -40,7 +40,7 @@
       label="Password"
       type="password"
       :required="isNew"
-      :rules="isNew ? [v => !!v || 'Password is required'] : []"
+      :rules="isNew ? [v => !!v || 'Password 为必填项'] : []"
       :disabled="formSaving"
     ></v-text-field>
 

@@ -15,7 +15,7 @@
     <v-text-field
         v-model="item.name"
         label="Key Name"
-        :rules="[v => !!v || 'Name is required']"
+        :rules="[v => !!v || 'Name 为必填项']"
         required
         :disabled="formSaving"
     />
@@ -23,7 +23,7 @@
     <v-select
         v-model="item.type"
         label="Type"
-        :rules="[v => (!!v || !canEditSecrets) || 'Type is required']"
+        :rules="[v => (!!v || !canEditSecrets) || 'Type 为必填项']"
         :items="inventoryTypes"
         item-value="id"
         item-text="name"
@@ -41,7 +41,7 @@
     <v-text-field
         v-model="item.login_password.password"
         label="Password"
-        :rules="[v => (!!v || !canEditSecrets) || 'Password is required']"
+        :rules="[v => (!!v || !canEditSecrets) || 'Password 为必填项']"
         v-if="item.type === 'login_password'"
         :required="canEditSecrets"
         :disabled="formSaving || !canEditSecrets"
@@ -67,7 +67,7 @@
       v-model="item.ssh.private_key"
       label="Private Key"
       :disabled="formSaving || !canEditSecrets"
-      :rules="[v => !!v || 'Private Key is required']"
+      :rules="[v => !!v || 'Private Key 为必填项']"
       v-if="item.type === 'ssh'"
     />
 

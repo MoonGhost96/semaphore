@@ -81,7 +81,7 @@
               v-if="item.type === 'build'"
               v-model="item.start_version"
               label="Start Version"
-              :rules="[v => !!v || 'Start Version is required']"
+              :rules="[v => !!v || 'Start Version 为必填项']"
               required
               :disabled="formSaving"
               placeholder="Example: 0.0.0"
@@ -96,7 +96,7 @@
               :items="buildTemplates"
               item-value="id"
               item-text="name"
-              :rules="[v => !!v || 'Build Template is required']"
+              :rules="[v => !!v || 'Build Template 为必填项']"
               required
               :disabled="formSaving"
               append-outer-icon="mdi-help-circle"
@@ -116,7 +116,7 @@
         <v-text-field
           v-model="item.name"
           label="Name *"
-          :rules="[v => !!v || 'Name is required']"
+          :rules="[v => !!v || 'Name 为必填项']"
           outlined
           dense
           required
@@ -136,7 +136,7 @@
         <v-text-field
           v-model="item.playbook"
           label="Playbook Filename *"
-          :rules="[v => !!v || 'Playbook Filename is required']"
+          :rules="[v => !!v || 'Playbook Filename 为必填项']"
           outlined
           dense
           required
@@ -150,7 +150,7 @@
           :items="inventory"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Inventory is required']"
+          :rules="[v => !!v || 'Inventory 为必填项']"
           outlined
           dense
           required
@@ -158,12 +158,13 @@
         ></v-select>
 
         <v-select
+          v-if="itemTypeIndex > 0"
           v-model="item.repository_id"
           label="Repository *"
           :items="repositories"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Repository is required']"
+          :rules="[v => !!v || 'Repository 为必填项']"
           outlined
           dense
           required
@@ -171,15 +172,40 @@
         ></v-select>
 
         <v-select
+          v-if="itemTypeIndex === 0"
+          v-model="item.repository_id"
+          label="Repository"
+          :items="repositories"
+          item-value="id"
+          item-text="name"
+          outlined
+          dense
+          :disabled="formSaving"
+        ></v-select>
+
+        <v-select
+          v-if="itemTypeIndex > 0"
           v-model="item.environment_id"
           label="Environment *"
           :items="environment"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Environment is required']"
+          :rules="[v => !!v || 'Environment 为必填项']"
           outlined
           dense
           required
+          :disabled="formSaving"
+        ></v-select>
+
+        <v-select
+          v-if="itemTypeIndex === 0"
+          v-model="item.environment_id"
+          label="Environment"
+          :items="environment"
+          item-value="id"
+          item-text="name"
+          outlined
+          dense
           :disabled="formSaving"
         ></v-select>
 

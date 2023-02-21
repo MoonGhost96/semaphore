@@ -17,7 +17,7 @@
       :items="users"
       item-value="id"
       item-text="name"
-      :rules="[v => !!v || 'User is required']"
+      :rules="[v => !!v || 'User 为必填项']"
       required
       :disabled="formSaving"
     ></v-select>

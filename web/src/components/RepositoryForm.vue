@@ -15,7 +15,7 @@
     <v-text-field
         v-model="item.name"
         label="Name"
-        :rules="[v => !!v || 'Name is required']"
+        :rules="[v => !!v || 'Name 为必填项']"
         required
         :disabled="formSaving"
     ></v-text-field>
@@ -24,7 +24,7 @@
         v-model="item.git_url"
         label="URL or path"
         :rules="[
-          v => !!v || 'Repository is required',
+          v => !!v || 'Repository 为必填项',
           v => getTypeOfUrl(v) != null || 'Incorrect URL',
         ]"
         required
@@ -58,7 +58,7 @@
     <v-text-field
       v-model="item.git_branch"
       label="Branch"
-      :rules="[v => (!!v || type === 'local') || 'Branch is required']"
+      :rules="[v => (!!v || type === 'local') || 'Branch 为必填项']"
       required
       :disabled="formSaving || type === 'local'"
     ></v-text-field>
@@ -69,7 +69,7 @@
         :items="keys"
         item-value="id"
         item-text="name"
-        :rules="[v => !!v || 'Key is required']"
+        :rules="[v => !!v || 'Key 为必填项']"
         required
         :disabled="formSaving"
     >
