@@ -14,7 +14,7 @@
     <v-text-field
       v-model="item.name"
       label="Project Name"
-      :rules="[v => !!v || 'Project name is required']"
+      :rules="[v => !!v || 'Project name 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>

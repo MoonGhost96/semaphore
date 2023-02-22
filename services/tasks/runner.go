@@ -199,20 +199,28 @@ func (t *TaskRunner) prepareRun() {
 
 	t.updateStatus()
 
-	if t.repository.GetType() == db.RepositoryLocal {
-		if _, err := os.Stat(t.repository.GitURL); err != nil {
-			t.Log("Failed in finding static repository at " + t.repository.GitURL + ": " + err.Error())
-			t.fail()
-			return
+	if t.repository.ID != 0 {
+		if t.repository.GetType() == db.RepositoryLocal {
+			if _, err := os.Stat(t.repository.GitURL); err != nil {
+				t.Log("Failed in finding static repository at " + t.repository.GitURL + ": " + err.Error())
+				t.fail()
+				return
+			}
+		} else {
+			if err := t.updateRepository(); err != nil {
+				t.Log("Failed updating repository: " + err.Error())
+				t.fail()
+				return
+			}
+			if err := t.checkoutRepository(); err != nil {
+				t.Log("Failed to checkout repository to required commit: " + err.Error())
+				t.fail()
+				return
+			}
 		}
 	} else {
-		if err := t.updateRepository(); err != nil {
-			t.Log("Failed updating repository: " + err.Error())
-			t.fail()
-			return
-		}
-		if err := t.checkoutRepository(); err != nil {
-			t.Log("Failed to checkout repository to required commit: " + err.Error())
+		if err := t.createEmptyRepository(); err != nil {
+			t.Log("创建空临时目录失败: " + err.Error())
 			t.fail()
 			return
 		}
@@ -373,24 +381,30 @@ func (t *TaskRunner) populateDetails() error {
 		return t.prepareError(err, "Template Inventory not found!")
 	}
 
-	// get repository
-	t.repository, err = t.pool.store.GetRepository(t.template.ProjectID, t.template.RepositoryID)
+	if t.template.RepositoryID != 0 {
+		// get repository
+		t.repository, err = t.pool.store.GetRepository(t.template.ProjectID, t.template.RepositoryID)
+	}
 
 	if err != nil {
 		return err
 	}
 
-	err = t.repository.SSHKey.DeserializeSecret()
-	if err != nil {
-		return err
+	if t.repository.SSHKeyID != 0 {
+		err = t.repository.SSHKey.DeserializeSecret()
+		if err != nil {
+			return err
+		}
 	}
 
 	// get environment
-	if t.template.EnvironmentID != nil {
+	if t.template.EnvironmentID != nil && *t.template.EnvironmentID != 0 {
 		t.environment, err = t.pool.store.GetEnvironment(t.template.ProjectID, *t.template.EnvironmentID)
 		if err != nil {
 			return err
 		}
+	} else {
+		t.environment.JSON = "{}"
 	}
 
 	if t.task.Environment != "" {
@@ -420,7 +434,6 @@ func (t *TaskRunner) populateDetails() error {
 
 		t.environment.JSON = string(ev)
 	}
-
 	return nil
 }
 
@@ -430,6 +443,25 @@ func (t *TaskRunner) installVaultKeyFile() error {
 	}
 
 	return t.template.VaultKey.Install(db.AccessKeyRoleAnsiblePasswordVault)
+}
+
+func (t *TaskRunner) createEmptyRepository() error {
+	repo := lib.GitRepository{
+		Logger:     t,
+		TemplateID: t.template.ID,
+		Repository: t.repository,
+	}
+	repoPath := repo.GetFullPath()
+	if _, err := os.Stat(repoPath); err != nil {
+		if !os.IsNotExist(err) {
+			return err
+		} else {
+			if err = os.Mkdir(repoPath, 0700); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
 
 func (t *TaskRunner) checkoutRepository() error {

@@ -14,7 +14,7 @@
     <v-text-field
       v-model="item.name"
       label="Name"
-      :rules="[v => !!v || 'Name is required']"
+      :rules="[v => !!v || 'Name 为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>
@@ -25,7 +25,7 @@
       :items="keys"
       item-value="id"
       item-text="name"
-      :rules="[v => !!v || 'User Credentials is required']"
+      :rules="[v => !!v || 'User Credentials 为必填项']"
       required
       :disabled="formSaving"
     ></v-select>
@@ -43,7 +43,7 @@
     <v-select
       v-model="item.type"
       label="Type"
-      :rules="[v => !!v || 'Type is required']"
+      :rules="[v => !!v || 'Type 为必填项']"
       :items="inventoryTypes"
       item-value="id"
       item-text="name"
@@ -54,7 +54,7 @@
     <v-text-field
       v-model="item.inventory"
       label="Path to Inventory file"
-      :rules="[v => !!v || 'Path to Inventory file is required']"
+      :rules="[v => !!v || 'Path to Inventory file 为必填项']"
       required
       :disabled="formSaving"
       v-if="item.type === 'file'"

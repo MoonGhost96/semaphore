@@ -16,14 +16,14 @@
             <v-text-field
               label="Name *"
               v-model.trim="editedVar.name"
-              :rules="[(v) => !!v || 'Name is required']"
+              :rules="[(v) => !!v || 'Name 为必填项']"
               required
             />
 
             <v-text-field
               label="Title *"
               v-model="editedVar.title"
-              :rules="[(v) => !!v || 'Title is required']"
+              :rules="[(v) => !!v || 'Title 为必填项']"
               required
             />
 

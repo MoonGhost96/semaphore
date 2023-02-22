@@ -39,6 +39,11 @@ func Execute() {
 }
 
 func runService() {
+	logFormatter := &log.TextFormatter{
+		ForceColors: true,
+	}
+	log.SetFormatter(logFormatter)
+	log.Println("服务启动...")
 	store := createStore("root")
 	taskPool := tasks.CreateTaskPool(store)
 	schedulePool := schedules.CreateSchedulePool(store, &taskPool)
@@ -47,10 +52,10 @@ func runService() {
 
 	util.Config.PrintDbInfo()
 
-	log.Printf("Tmp Path (projects home) %v\n", util.Config.TmpPath)
-	log.Printf("Semaphore %v\n", util.Version)
-	log.Printf("Interface %v\n", util.Config.Interface)
-	log.Printf("Port %v\n", util.Config.Port)
+	log.Printf("Tmp Path (projects home) %v", util.Config.TmpPath)
+	log.Printf("Semaphore %v", util.Version)
+	log.Printf("Interface %v", util.Config.Interface)
+	log.Printf("Port %v", util.Config.Port)
 
 	go sockets.StartWS()
 	go schedulePool.Run()

@@ -14,6 +14,11 @@ func TestRepository_GetSchema(t *testing.T) {
 	if schema != "https" {
 		t.Fatal()
 	}
+	repo = Repository{GitURL: "http://example.com/hello/world"}
+	schema = repo.GetType()
+	if schema != "http" {
+		t.Fatal()
+	}
 }
 
 func TestRepository_ClearCache(t *testing.T) {

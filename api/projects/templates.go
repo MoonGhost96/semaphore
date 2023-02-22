@@ -71,6 +71,8 @@ func AddTemplate(w http.ResponseWriter, r *http.Request) {
 	}
 
 	template.ProjectID = project.ID
+	//fix:防止出现复制template时变为修改
+	template.ID = 0
 	newTemplate, err := helpers.Store(r).CreateTemplate(template)
 
 	if err != nil {

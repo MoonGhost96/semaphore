@@ -326,6 +326,7 @@ func (p *TaskPool) AddTask(taskObj db.Task, userID *int, projectID int) (newTask
 
 	err = taskRunner.populateDetails()
 	if err != nil {
+		log.Error("taskRunner.populateDetails: ", err)
 		taskRunner.Log("Error: " + err.Error())
 		taskRunner.fail()
 		return

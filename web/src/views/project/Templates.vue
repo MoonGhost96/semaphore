@@ -173,11 +173,13 @@
       </template>
 
       <template v-slot:item.environment_id="{ item }">
-        {{ environment.find((x) => x.id === item.environment_id).name }}
+        {{ environment.find((x) => x.id === item.environment_id)!==undefined?
+        environment.find((x) => x.id === item.environment_id).name: '无' }}
       </template>
 
       <template v-slot:item.repository_id="{ item }">
-        {{ repositories.find((x) => x.id === item.repository_id).name }}
+        {{ repositories.find((x) => x.id === item.repository_id) !== undefined?
+        repositories.find((x) => x.id === item.repository_id).name: '无' }}
       </template>
 
       <template v-slot:item.actions="{ item }">
