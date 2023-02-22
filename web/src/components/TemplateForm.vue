@@ -181,6 +181,7 @@
           outlined
           dense
           :disabled="formSaving"
+          clearable
         ></v-select>
 
         <v-select
@@ -207,6 +208,7 @@
           outlined
           dense
           :disabled="formSaving"
+          clearable
         ></v-select>
 
         <v-select
