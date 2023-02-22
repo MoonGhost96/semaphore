@@ -3,7 +3,7 @@
     <EditDialog
       v-model="editDialog"
       :save-button-text="itemId === 'new' ? '创建' : '保存'"
-      :title="`${itemId === 'new' ? '创建' : '编辑'}秘钥`"
+      :title="`${itemId === 'new' ? '创建' : '编辑'}剧本`"
       :max-width="450"
       position="top"
       @save="loadItems()"
@@ -28,20 +28,20 @@
     />
 
     <YesNoDialog
-      title="删除秘钥"
-      text="确认删除该秘钥?"
+      title="删除剧本"
+      text="确认删除该剧本?"
       v-model="deleteItemDialog"
       @yes="deleteItem(itemId)"
     />
 
     <v-toolbar flat >
       <v-app-bar-nav-icon @click="showDrawer()"></v-app-bar-nav-icon>
-      <v-toolbar-title>秘钥管理</v-toolbar-title>
+      <v-toolbar-title>剧本管理</v-toolbar-title>
       <v-spacer></v-spacer>
       <v-btn
         color="primary"
         @click="editItem('new')"
-      >创建秘钥</v-btn>
+      >创建剧本</v-btn>
     </v-toolbar>
 
     <v-data-table
