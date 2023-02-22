@@ -175,7 +175,8 @@
               <v-list-item-content>
                 <v-list-item-title>Environment</v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ environment.find((x) => x.id === item.environment_id).name }}
+                  {{ environment.find((x) => x.id === item.environment_id)!==undefined?
+                  environment.find((x) => x.id === item.environment_id).name: '无' }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
@@ -190,7 +191,8 @@
               <v-list-item-content>
                 <v-list-item-title>Repository</v-list-item-title>
                 <v-list-item-subtitle>
-                  {{ repositories.find((x) => x.id === item.repository_id).name }}
+                  {{ repositories.find((x) => x.id === item.repository_id) !== undefined?
+                  repositories.find((x) => x.id === item.repository_id).name: '无' }}
                 </v-list-item-subtitle>
               </v-list-item-content>
             </v-list-item>
