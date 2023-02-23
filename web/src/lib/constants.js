@@ -13,8 +13,8 @@ export const TEMPLATE_TYPE_TITLES = {
 };
 
 export const TEMPLATE_TYPE_ACTION_TITLES = {
-  '': '任务',
-  command: '命令',
+  '': '运行',
+  command: '运行',
   build: '构建',
   deploy: '部署',
 };
