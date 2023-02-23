@@ -7,9 +7,10 @@ import (
 type TemplateType string
 
 const (
-	TemplateTask   TemplateType = ""
-	TemplateBuild  TemplateType = "build"
-	TemplateDeploy TemplateType = "deploy"
+	TemplateTask    TemplateType = ""
+	TemplateCommand TemplateType = "command"
+	TemplateBuild   TemplateType = "build"
+	TemplateDeploy  TemplateType = "deploy"
 )
 
 type SurveyVarType string
@@ -73,6 +74,10 @@ type Template struct {
 	SurveyVars     []SurveyVar `db:"-" json:"survey_vars"`
 
 	SuppressSuccessAlerts bool `db:"suppress_success_alerts" json:"suppress_success_alerts"`
+
+	//命令行模块
+	Command string `db:"-" json:"command"`
+	Module  string `db:"-" json:"module"`
 }
 
 func (tpl *Template) Validate() error {
@@ -80,7 +85,7 @@ func (tpl *Template) Validate() error {
 		return &ValidationError{"template name can not be empty"}
 	}
 
-	if tpl.Playbook == "" {
+	if tpl.Playbook == "" && tpl.Type != TemplateCommand {
 		return &ValidationError{"template playbook can not be empty"}
 	}
 

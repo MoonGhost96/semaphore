@@ -246,7 +246,7 @@
           dense
           required
           :disabled="formSaving"
-          placeholder="Example: ls -l"
+          placeholder="Example: ls -l >> output.txt; echo 'hello world'"
         ></v-text-field>
       </v-col>
 

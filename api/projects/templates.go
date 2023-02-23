@@ -1,6 +1,7 @@
 package projects
 
 import (
+	"encoding/json"
 	log "github.com/Sirupsen/logrus"
 	"github.com/ansible-semaphore/semaphore/api/helpers"
 	"github.com/ansible-semaphore/semaphore/db"
@@ -68,6 +69,19 @@ func AddTemplate(w http.ResponseWriter, r *http.Request) {
 	var template db.Template
 	if !helpers.Bind(w, r, &template) {
 		return
+	}
+
+	if template.Type == "command" {
+		template.Arguments = new(string)
+		jsonArguments := make(map[string]interface{})
+		jsonArguments["command"] = template.Command
+		jsonArguments["module"] = template.Module
+		arguments, err := json.Marshal(jsonArguments)
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+		*template.Arguments = string(arguments)
 	}
 
 	template.ProjectID = project.ID
