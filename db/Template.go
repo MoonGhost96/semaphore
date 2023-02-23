@@ -76,8 +76,8 @@ type Template struct {
 	SuppressSuccessAlerts bool `db:"suppress_success_alerts" json:"suppress_success_alerts"`
 
 	//命令行模块
-	Command string `db:"-" json:"command"`
-	Module  string `db:"-" json:"module"`
+	Command string `db:"command" json:"command"`
+	Module  string `db:"module" json:"module"`
 }
 
 func (tpl *Template) Validate() error {
