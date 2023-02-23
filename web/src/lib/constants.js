@@ -1,17 +1,28 @@
 export const TEMPLATE_TYPE_ICONS = {
   '': 'mdi-cog',
+  command: 'mdi-console-line',
   build: 'mdi-wrench',
   deploy: 'mdi-arrow-up-bold-box',
 };
 
 export const TEMPLATE_TYPE_TITLES = {
-  '': 'Task',
-  build: 'Build',
-  deploy: 'Deploy',
+  '': '任务',
+  command: '命令',
+  build: '构建',
+  deploy: '部署',
 };
 
 export const TEMPLATE_TYPE_ACTION_TITLES = {
-  '': 'Run',
-  build: 'Build',
-  deploy: 'Deploy',
+  '': '任务',
+  command: '命令',
+  build: '构建',
+  deploy: '部署',
 };
+
+export const TEMPLATE_COMMAND_MODULES = [
+  'shell',
+  'win_shell',
+  'win_powershell',
+  'command',
+  'win_command',
+];

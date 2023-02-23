@@ -16,7 +16,7 @@
     />
 
     <EditDialog
-      :max-width="700"
+      :max-width="1080"
       v-model="editDialog"
       save-button-text="保存"
       title="编辑模板"
@@ -35,7 +35,7 @@
     </EditDialog>
 
     <EditDialog
-      :max-width="700"
+      :max-width="1080"
       v-model="copyDialog"
       save-button-text="创建"
       title="创建新模板"

@@ -115,8 +115,8 @@
 
         <v-text-field
           v-model="item.name"
-          label="Name *"
-          :rules="[v => !!v || 'Name 为必填项']"
+          label="名称*"
+          :rules="[v => !!v || '名称为必填项']"
           outlined
           dense
           required
@@ -125,7 +125,7 @@
 
         <v-textarea
           v-model="item.description"
-          label="Description"
+          label="描述"
           :disabled="formSaving"
           rows="1"
           :auto-grow="true"
@@ -134,9 +134,10 @@
         ></v-textarea>
 
         <v-text-field
+          v-if="item.type !== 'command'"
           v-model="item.playbook"
-          label="Playbook Filename *"
-          :rules="[v => !!v || 'Playbook Filename 为必填项']"
+          label="Playbook文件路径*"
+          :rules="[v => !!v || 'Playbook文件路径为必填项']"
           outlined
           dense
           required
@@ -146,11 +147,11 @@
 
         <v-select
           v-model="item.inventory_id"
-          label="Inventory *"
+          label="资产目录*"
           :items="inventory"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Inventory 为必填项']"
+          :rules="[v => !!v || '资产目录为必填项']"
           outlined
           dense
           required
@@ -158,13 +159,13 @@
         ></v-select>
 
         <v-select
-          v-if="itemTypeIndex > 0"
+          v-if="item.type !== '' && item.type !== 'command'"
           v-model="item.repository_id"
-          label="Repository *"
+          label="仓库*"
           :items="repositories"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Repository 为必填项']"
+          :rules="[v => !!v || '仓库为必填项']"
           outlined
           dense
           required
@@ -172,9 +173,9 @@
         ></v-select>
 
         <v-select
-          v-if="itemTypeIndex === 0"
+          v-if="item.type === '' || item.type === 'command'"
           v-model="item.repository_id"
-          label="Repository"
+          label="仓库"
           :items="repositories"
           item-value="id"
           item-text="name"
@@ -185,13 +186,13 @@
         ></v-select>
 
         <v-select
-          v-if="itemTypeIndex > 0"
+          v-if="item.type !== '' && item.type !== 'command'"
           v-model="item.environment_id"
-          label="Environment *"
+          label="环境变量*"
           :items="environment"
           item-value="id"
           item-text="name"
-          :rules="[v => !!v || 'Environment 为必填项']"
+          :rules="[v => !!v || '环境变量为必填项']"
           outlined
           dense
           required
@@ -199,9 +200,9 @@
         ></v-select>
 
         <v-select
-          v-if="itemTypeIndex === 0"
+          v-if="item.type === ''"
           v-model="item.environment_id"
-          label="Environment"
+          label="环境变量"
           :items="environment"
           item-value="id"
           item-text="name"
@@ -211,40 +212,64 @@
           clearable
         ></v-select>
 
+<!--        <v-select-->
+<!--          v-if="item.type === ''"-->
+<!--          v-model="item.vault_key_id"-->
+<!--          label="Ansible-Vault密码"-->
+<!--          clearable-->
+<!--          :items="loginPasswordKeys"-->
+<!--          item-value="id"-->
+<!--          item-text="name"-->
+<!--          :disabled="formSaving"-->
+<!--          outlined-->
+<!--          dense-->
+<!--        ></v-select>-->
+
         <v-select
-          v-if="itemTypeIndex === 0"
-          v-model="item.vault_key_id"
-          label="Vault Password"
-          clearable
-          :items="loginPasswordKeys"
-          item-value="id"
-          item-text="name"
-          :disabled="formSaving"
+          v-if="item.type === 'command'"
+          v-model="item.module"
+          label="命令模块*"
+          :items="TEMPLATE_COMMAND_MODULES"
+          :rules="[v => !!v || '命令模块为必填项']"
           outlined
           dense
+          required
+          :disabled="formSaving"
         ></v-select>
+
+        <v-text-field
+          v-if="item.type === 'command'"
+          v-model="item.command"
+          label="命令*"
+          :rules="[v => !!v || '命令为必填项']"
+          outlined
+          dense
+          required
+          :disabled="formSaving"
+          placeholder="Example: ls -l"
+        ></v-text-field>
       </v-col>
 
       <v-col cols="12" md="6" class="pb-0">
 
-        <v-select
-          v-if="itemTypeIndex > 0"
-          v-model="item.vault_key_id"
-          label="Vault Password"
-          clearable
-          :items="loginPasswordKeys"
-          item-value="id"
-          item-text="name"
-          :disabled="formSaving"
-          outlined
-          dense
-        ></v-select>
+<!--        <v-select-->
+<!--          v-if="item.type !== ''"-->
+<!--          v-model="item.vault_key_id"-->
+<!--          label="Ansible-Vault密码"-->
+<!--          clearable-->
+<!--          :items="loginPasswordKeys"-->
+<!--          item-value="id"-->
+<!--          item-text="name"-->
+<!--          :disabled="formSaving"-->
+<!--          outlined-->
+<!--          dense-->
+<!--        ></v-select>-->
 
         <SurveyVars style="margin-top: -10px;" :vars="item.survey_vars" @change="setSurveyVars"/>
 
         <v-select
           v-model="item.view_id"
-          label="View"
+          label="视图"
           clearable
           :items="views"
           item-value="id"
@@ -259,7 +284,7 @@
             <v-text-field
               style="font-size: 14px"
               v-model="cronFormat"
-              label="Cron"
+              label="Cron定时任务"
               :disabled="formSaving"
               placeholder="* * * * *"
               v-if="schedules == null || schedules.length <= 1"
@@ -269,14 +294,17 @@
             ></v-text-field>
           </v-col>
 
-          <v-col cols="7">
+          <v-col
+            cols="7"
+            v-if="item.type !== 'command'"
+          >
             <a
               v-if="!cronRepositoryIdVisible && cronRepositoryId == null"
               @click="cronRepositoryIdVisible = true"
               class="text-caption d-block"
               style="line-height: 1.1;"
             >
-              I want to run a task by the cron only for for new commits of some repository
+              针对某个版本仓库的新commit通过cron定时执行一个任务。
             </a>
 
             <v-select
@@ -299,14 +327,13 @@
         </v-row>
 
         <small class="mt-1 mb-4 d-block">
-          Read the
-          <a target="_blank" href="https://pkg.go.dev/github.com/robfig/cron#hdr-CRON_Expression_Format">docs</a>
-          to learn more about Cron.
+          请使用五位Cron格式，例如"* * * * *"。更多信息请参考
+          <a target="_blank" href="https://pkg.go.dev/github.com/robfig/cron#hdr-CRON_Expression_Format">Cron文档</a>
         </small>
 
         <v-checkbox
           class="mt-0"
-          label="Suppress success alerts"
+          label="运行成功无需告警"
           v-model="item.suppress_success_alerts"
         />
 
@@ -337,7 +364,7 @@
         />
 
         <v-checkbox
-          label="Allow CLI args in Task"
+          label="允许在执行时指定参数"
           v-model="item.allow_override_args_in_task"
         />
 
@@ -361,7 +388,7 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/vue/vue.js';
 import 'codemirror/addon/lint/json-lint.js';
 import 'codemirror/addon/display/placeholder.js';
-import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES } from '../lib/constants';
+import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '../lib/constants';
 import SurveyVars from './SurveyVars';
 
 export default {
@@ -381,6 +408,7 @@ export default {
       itemTypeIndex: 0,
       TEMPLATE_TYPE_ICONS,
       TEMPLATE_TYPE_TITLES,
+      TEMPLATE_COMMAND_MODULES,
       cmOptions: {
         tabSize: 2,
         mode: 'application/json',

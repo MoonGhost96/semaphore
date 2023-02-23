@@ -27,7 +27,7 @@
     </v-dialog>
 
     <EditDialog
-      :max-width="700"
+      :max-width="1080"
       v-model="editDialog"
       save-button-text="创建"
       title="创建任务模板"
