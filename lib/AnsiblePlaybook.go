@@ -64,6 +64,18 @@ func (p AnsiblePlaybook) RunPlaybook(args []string, environmentVars *[]string, c
 	return cmd.Wait()
 }
 
+func (p AnsiblePlaybook) RunAnsible(args []string, environmentVars *[]string, cb func(*os.Process)) error {
+	cmd := p.makeCmd("ansible", args, environmentVars)
+	p.Logger.LogCmd(cmd)
+	cmd.Stdin = strings.NewReader("")
+	err := cmd.Start()
+	if err != nil {
+		return err
+	}
+	cb(cmd.Process)
+	return cmd.Wait()
+}
+
 func (p AnsiblePlaybook) RunGalaxy(args []string) error {
 	return p.runCmd("ansible-galaxy", args)
 }
