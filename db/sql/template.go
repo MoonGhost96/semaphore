@@ -78,9 +78,10 @@ func (d *SqlDb) UpdateTemplate(template db.Template) error {
 		"view_id=?, "+
 		"autorun=?, "+
 		"survey_vars=?, "+
-		"suppress_success_alerts=? "+
+		"suppress_success_alerts=?, "+
+		"module=?, "+
+		"command=? "+
 		"where id=? and project_id=?",
-		"where module=? and command=?",
 		template.InventoryID,
 		template.RepositoryID,
 		template.EnvironmentID,
@@ -97,10 +98,10 @@ func (d *SqlDb) UpdateTemplate(template db.Template) error {
 		template.Autorun,
 		db.ObjectToJSON(template.SurveyVars),
 		template.SuppressSuccessAlerts,
-		template.ID,
-		template.ProjectID,
 		template.Module,
 		template.Command,
+		template.ID,
+		template.ProjectID,
 	)
 	return err
 }
