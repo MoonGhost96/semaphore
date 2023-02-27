@@ -80,6 +80,7 @@ func (d *SqlDb) UpdateTemplate(template db.Template) error {
 		"survey_vars=?, "+
 		"suppress_success_alerts=? "+
 		"where id=? and project_id=?",
+		"where module=? and command=?",
 		template.InventoryID,
 		template.RepositoryID,
 		template.EnvironmentID,
@@ -98,6 +99,8 @@ func (d *SqlDb) UpdateTemplate(template db.Template) error {
 		template.SuppressSuccessAlerts,
 		template.ID,
 		template.ProjectID,
+		template.Module,
+		template.Command,
 	)
 	return err
 }
