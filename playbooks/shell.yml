@@ -1,0 +1,10 @@
+---
+- hosts: all
+  gather_facts: no
+  tasks:
+    - name: run shell command
+      shell: "{{ SemaphoreCommand }}"
+      register: shell_result
+      ignore_errors: true
+    - debug:
+        msg: "{{shell_result.stdout}}"

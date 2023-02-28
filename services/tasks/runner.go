@@ -244,6 +244,12 @@ func (t *TaskRunner) prepareRun() {
 		return
 	}
 
+	if err := t.installCommandPlaybook(); err != nil {
+		t.Log("Failed to install command playbook: " + err.Error())
+		t.fail()
+		return
+	}
+
 	t.prepared = true
 }
 
@@ -299,20 +305,12 @@ func (t *TaskRunner) run() {
 		t.setStatus(db.TaskStoppedStatus)
 		return
 	}
-	if t.template.Type == "command" {
-		err = t.runCommand()
-		if err != nil {
-			t.Log("Running command failed: " + err.Error())
-			t.fail()
-			return
-		}
-	} else {
-		err = t.runPlaybook()
-		if err != nil {
-			t.Log("Running playbook failed: " + err.Error())
-			t.fail()
-			return
-		}
+
+	err = t.runPlaybook()
+	if err != nil {
+		t.Log("Running playbook failed: " + err.Error())
+		t.fail()
+		return
 	}
 
 	t.setStatus(db.TaskSuccessStatus)
@@ -619,6 +617,7 @@ func (t *TaskRunner) runGalaxy(args []string) error {
 
 func (t *TaskRunner) runPlaybook() (err error) {
 	args, err := t.getPlaybookArgs()
+
 	if err != nil {
 		return
 	}
@@ -633,24 +632,6 @@ func (t *TaskRunner) runPlaybook() (err error) {
 		TemplateID: t.template.ID,
 		Repository: t.repository,
 	}.RunPlaybook(args, &environmentVariables, func(p *os.Process) { t.process = p })
-}
-
-func (t *TaskRunner) runCommand() (err error) {
-	args, err := t.getCommandArgs()
-	if err != nil {
-		return
-	}
-
-	environmentVariables, err := t.getEnvironmentENV()
-	if err != nil {
-		return
-	}
-
-	return lib.AnsiblePlaybook{
-		Logger:     t,
-		TemplateID: t.template.ID,
-		Repository: t.repository,
-	}.RunAnsible(args, &environmentVariables, func(p *os.Process) { t.process = p })
 }
 
 func (t *TaskRunner) getEnvironmentENV() (arr []string, err error) {
@@ -678,6 +659,10 @@ func (t *TaskRunner) getEnvironmentExtraVars() (str string, err error) {
 		if err != nil {
 			return
 		}
+	}
+
+	if t.template.Type == "command" {
+		extraVars["semaphore_template_command_line"] = t.template.Command
 	}
 
 	taskDetails := make(map[string]interface{})
@@ -721,10 +706,18 @@ func (t *TaskRunner) getEnvironmentExtraVars() (str string, err error) {
 
 // nolint: gocyclo
 func (t *TaskRunner) getPlaybookArgs() (args []string, err error) {
-	playbookName := t.task.Playbook
-	if playbookName == "" {
-		playbookName = t.template.Playbook
-	}
+	commandMode := t.template.Type == "command"
+	playbookName := func() string {
+		if commandMode {
+			return t.GetCommandPlaybookPath()
+		} else {
+			if t.task.Playbook != "" {
+				return t.task.Playbook
+			} else {
+				return t.template.Playbook
+			}
+		}
+	}()
 
 	var inventory string
 	switch t.inventory.Type {
@@ -824,112 +817,6 @@ func (t *TaskRunner) getPlaybookArgs() (args []string, err error) {
 	args = append(args, playbookName)
 
 	return
-}
-
-// nolint: gocyclo
-func (t *TaskRunner) getCommandArgs() (args []string, err error) {
-
-	var inventory string
-	switch t.inventory.Type {
-	case db.InventoryFile:
-		inventory = t.inventory.Inventory
-	case db.InventoryStatic, db.InventoryStaticYaml:
-		inventory = util.Config.TmpPath + "/inventory_" + strconv.Itoa(t.task.ID)
-		if t.inventory.Type == db.InventoryStaticYaml {
-			inventory += ".yml"
-		}
-	default:
-		err = fmt.Errorf("invalid invetory type")
-		return
-	}
-
-	args = []string{
-		"all", "-i", inventory, "--module-name", t.template.Module, "--args", processAnsibleCommand(t.template.Command),
-	}
-
-	if t.inventory.SSHKeyID != nil {
-		switch t.inventory.SSHKey.Type {
-		case db.AccessKeySSH:
-			args = append(args, "--private-key="+t.inventory.SSHKey.GetPath())
-			//args = append(args, "--extra-vars={\"ansible_ssh_private_key_file\": \""+t.inventory.SSHKey.GetPath()+"\"}")
-			if t.inventory.SSHKey.SshKey.Login != "" {
-				args = append(args, "--extra-vars={\"ansible_user\": \""+t.inventory.SSHKey.SshKey.Login+"\"}")
-			}
-		case db.AccessKeyLoginPassword:
-			args = append(args, "--extra-vars=@"+t.inventory.SSHKey.GetPath())
-		case db.AccessKeyNone:
-		default:
-			err = fmt.Errorf("access key does not suite for inventory's user credentials")
-			return
-		}
-	}
-
-	if t.inventory.BecomeKeyID != nil {
-		switch t.inventory.BecomeKey.Type {
-		case db.AccessKeyLoginPassword:
-			args = append(args, "--extra-vars=@"+t.inventory.BecomeKey.GetPath())
-		case db.AccessKeyNone:
-		default:
-			err = fmt.Errorf("access key does not suite for inventory's sudo user credentials")
-			return
-		}
-	}
-
-	if t.task.Debug {
-		args = append(args, "-vvvv")
-	}
-
-	if t.task.Diff {
-		args = append(args, "--diff")
-	}
-
-	if t.task.DryRun {
-		args = append(args, "--check")
-	}
-
-	if t.template.VaultKeyID != nil {
-		args = append(args, "--vault-password-file", t.template.VaultKey.GetPath())
-	}
-
-	extraVars, err := t.getEnvironmentExtraVars()
-	if err != nil {
-		t.Log(err.Error())
-		t.Log("Could not remove command environment, if existant it will be passed to --extra-vars. This is not fatal but be aware of side effects")
-	} else if extraVars != "" {
-		args = append(args, "--extra-vars", extraVars)
-	}
-
-	var templateExtraArgs []string
-	if t.template.Arguments != nil {
-		err = json.Unmarshal([]byte(*t.template.Arguments), &templateExtraArgs)
-		if err != nil {
-			t.Log("Invalid format of the template extra arguments, must be valid JSON")
-			return
-		}
-	}
-
-	var taskExtraArgs []string
-	if t.template.AllowOverrideArgsInTask && t.task.Arguments != nil {
-		err = json.Unmarshal([]byte(*t.task.Arguments), &taskExtraArgs)
-		if err != nil {
-			t.Log("Invalid format of the TaskRunner extra arguments, must be valid JSON")
-			return
-		}
-	}
-
-	if t.task.Limit != "" {
-		t.Log("--limit=" + t.task.Limit)
-		taskExtraArgs = append(taskExtraArgs, "--limit="+t.task.Limit)
-	}
-
-	args = append(args, templateExtraArgs...)
-	args = append(args, taskExtraArgs...)
-
-	return
-}
-
-func processAnsibleCommand(s string) string {
-	return "\"" + strings.TrimSpace(strings.Replace(s, `"`, `\"`, -1)) + "\""
 }
 
 func hasRequirementsChanges(requirementsFilePath string, requirementsHashFilePath string) bool {
