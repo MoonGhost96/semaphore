@@ -12,56 +12,56 @@ const (
 - hosts: all
   gather_facts: no
   tasks:
-    - name: run command
+    - name: run shell task
       shell: "{{ semaphore_template_command_line }}"
       register: command_result
       ignore_errors: true
     - debug:
-        msg: "{{command_result.stdout}}"
+        msg: "{{command_result.stdout.splitlines()}}"
 `
 	CommandPlaybookTemplate = `---
 - hosts: all
   gather_facts: no
   tasks:
-    - name: run command
+    - name: run command task
       command: "{{ semaphore_template_command_line }}"
       register: command_result
       ignore_errors: true
     - debug:
-        msg: "{{command_result.stdout}}"
+        msg: "{{command_result.stdout.splitlines()}}"
 `
 	WinShellPlaybookTemplate = `---
 - hosts: all
   gather_facts: no
   tasks:
-    - name: run command
+    - name: run win_shell task
       win_shell: "{{ semaphore_template_command_line }}"
       register: command_result
       ignore_errors: true
     - debug:
-        msg: "{{command_result.stdout}}"
+        msg: "{{command_result.stdout.splitlines()}}"
 `
 	WinCommandPlaybookTemplate = `---
 - hosts: all
   gather_facts: no
   tasks:
-    - name: run command
+    - name: run win_command task
       win_command: "{{ semaphore_template_command_line }}"
       register: command_result
       ignore_errors: true
     - debug:
-        msg: "{{command_result.stdout}}"
+        msg: "{{command_result.stdout.splitlines()}}"
 `
 	WinPowershellPlaybookTemplate = `---
 - hosts: all
   gather_facts: no
   tasks:
-    - name: run command
+    - name: run win_powershell task
       win_powershell: "{{ semaphore_template_command_line }}"
       register: command_result
       ignore_errors: true
     - debug:
-        msg: "{{command_result.stdout}}"
+        msg: "{{command_result.stdout.splitlines()}}"
 `
 )
 
