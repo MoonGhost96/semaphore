@@ -440,7 +440,6 @@ func (t *TaskRunner) populateDetails() error {
 
 		t.environment.JSON = string(ev)
 	}
-
 	return nil
 }
 
@@ -618,6 +617,7 @@ func (t *TaskRunner) runGalaxy(args []string) error {
 
 func (t *TaskRunner) runPlaybook() (err error) {
 	args, err := t.getPlaybookArgs()
+
 	if err != nil {
 		return
 	}
