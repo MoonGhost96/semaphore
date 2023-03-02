@@ -237,7 +237,7 @@
           :disabled="formSaving"
         ></v-select>
 
-        <v-text-field
+        <v-textarea
           v-if="item.type === 'command'"
           v-model="item.command"
           label="命令*"
@@ -246,8 +246,10 @@
           dense
           required
           :disabled="formSaving"
-          placeholder="Example: ls -l >> output.txt; echo 'hello world'"
-        ></v-text-field>
+          placeholder="Example:
+          ls -l >> output.txt
+          echo 'hello world'"
+        ></v-textarea>
       </v-col>
 
       <v-col cols="12" md="6" class="pb-0">
