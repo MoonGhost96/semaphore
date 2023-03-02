@@ -47,6 +47,7 @@ func runService() {
 	store := createStore("root")
 	taskPool := tasks.CreateTaskPool(store)
 	schedulePool := schedules.CreateSchedulePool(store, &taskPool)
+	tasks.ClearPlaybookTmpFile()
 
 	defer schedulePool.Destroy()
 

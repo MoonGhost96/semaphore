@@ -112,3 +112,12 @@ func (t *TaskRunner) installCommandPlaybook() error {
 func (t *TaskRunner) GetCommandPlaybookPath() string {
 	return util.Config.TmpPath + "/playbook_" + t.template.Module + ".yml"
 }
+
+func ClearPlaybookTmpFile() {
+	playbookTypes := make([]string, 0)
+	playbookTypes = append(playbookTypes, "shell", "command", "win_shell", "win_command", "win_powershell")
+	for _, playbookType := range playbookTypes {
+		path := util.Config.TmpPath + "/playbook_" + playbookType + ".yml"
+		_ = os.Remove(path)
+	}
+}
