@@ -392,8 +392,6 @@ import 'codemirror/addon/lint/json-lint.js';
 import 'codemirror/addon/display/placeholder.js';
 import 'codemirror/theme/base16-dark.css';
 import 'codemirror/theme/base16-light.css';
-import 'codemirror/mode/shell/shell.js';
-import 'codemirror/mode/powershell/powershell.js';
 import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '@/lib/constants';
 import SurveyVars from './SurveyVars';
 
