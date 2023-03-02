@@ -388,7 +388,11 @@ import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/vue/vue.js';
 import 'codemirror/addon/lint/json-lint.js';
 import 'codemirror/addon/display/placeholder.js';
-import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '../lib/constants';
+import 'codemirror/theme/base16-dark.css';
+import 'codemirror/theme/base16-light.css';
+import 'codemirror/mode/shell/shell.js';
+import 'codemirror/mode/powershell/powershell.js';
+import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '@/lib/constants';
 import SurveyVars from './SurveyVars';
 
 export default {
@@ -409,14 +413,6 @@ export default {
       TEMPLATE_TYPE_ICONS,
       TEMPLATE_TYPE_TITLES,
       TEMPLATE_COMMAND_MODULES,
-      cmOptions: {
-        tabSize: 2,
-        mode: 'application/json',
-        lineNumbers: true,
-        line: true,
-        lint: true,
-        indentWithTabs: false,
-      },
       item: null,
       keys: null,
       inventory: null,
@@ -455,6 +451,18 @@ export default {
   },
 
   computed: {
+    cmOptions() {
+      return {
+        tabSize: 2,
+        mode: 'application/json',
+        lineNumbers: true,
+        line: true,
+        lint: true,
+        indentWithTabs: false,
+        theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
+      };
+    },
+
     isLoaded() {
       if (this.isNew && this.sourceItemId == null) {
         return true;
