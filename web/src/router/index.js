@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import VueRouter from 'vue-router';
+import Playbooks from '../views/project/Playbooks.vue';
 import History from '../views/project/History.vue';
 import Activity from '../views/project/Activity.vue';
 import Settings from '../views/project/Settings.vue';
@@ -52,6 +53,10 @@ const routes = [
   {
     path: '/project/:projectId/views/:viewId/templates/:templateId',
     component: TemplateView,
+  },
+  {
+    path: '/project/:projectId/playbooks',
+    component: Playbooks,
   },
   // {
   //   path: '/project/:projectId/views/:viewId/templates/:templateId/edit',
