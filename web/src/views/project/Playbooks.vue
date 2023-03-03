@@ -9,7 +9,7 @@
       @save="loadItems()"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
-        <KeyForm
+        <PlaybookForm
           :project-id="projectId"
           :item-id="itemId"
           @save="onSave"
@@ -79,10 +79,10 @@
 </template>
 <script>
 import ItemListPageBase from '@/components/ItemListPageBase';
-import KeyForm from '@/components/KeyForm.vue';
+import PlaybookForm from '@/components/PlaybookForm.vue';
 
 export default {
-  components: { KeyForm },
+  components: { PlaybookForm },
   mixins: [ItemListPageBase],
   methods: {
     getHeaders() {
