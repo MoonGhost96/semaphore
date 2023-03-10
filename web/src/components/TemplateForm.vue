@@ -237,19 +237,17 @@
           :disabled="formSaving"
         ></v-select>
 
-        <v-textarea
+        <codemirror
           v-if="item.type === 'command'"
+          :style="{ border: '1px solid lightgray' }"
           v-model="item.command"
-          label="命令*"
-          :rules="[v => !!v || '命令为必填项']"
-          outlined
-          dense
-          required
+          :options="commandCmOptions"
           :disabled="formSaving"
-          placeholder="Example:
-          ls -l >> output.txt
-          echo 'hello world'"
-        ></v-textarea>
+          placeholder="命令:
+ls -l >> output.txt
+echo 'hello world'"
+        />
+
       </v-col>
 
       <v-col cols="12" md="6" class="pb-0">
@@ -354,9 +352,9 @@
         <codemirror
           :style="{ border: '1px solid lightgray' }"
           v-model="item.arguments"
-          :options="cmOptions"
+          :options="jsonCmOptions"
           :disabled="formSaving"
-          placeholder='CLI Args (JSON array). Example:
+          placeholder='自定义运行参数(JSON格式)，例如:
 [
   "-i",
   "@myinventory.sh",
@@ -392,6 +390,7 @@ import 'codemirror/addon/lint/json-lint.js';
 import 'codemirror/addon/display/placeholder.js';
 import 'codemirror/theme/base16-dark.css';
 import 'codemirror/theme/base16-light.css';
+import 'codemirror/mode/shell/shell.js';
 import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '@/lib/constants';
 import SurveyVars from './SurveyVars';
 
@@ -451,10 +450,22 @@ export default {
   },
 
   computed: {
-    cmOptions() {
+    jsonCmOptions() {
       return {
         tabSize: 2,
         mode: 'application/json',
+        lineNumbers: true,
+        line: true,
+        lint: true,
+        indentWithTabs: false,
+        theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
+      };
+    },
+
+    commandCmOptions() {
+      return {
+        tabSize: 2,
+        mode: 'shell',
         lineNumbers: true,
         line: true,
         lint: true,
