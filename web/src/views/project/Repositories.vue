@@ -106,7 +106,7 @@ export default {
   methods: {
     getHeaders() {
       return [{
-        text: 'Name',
+        text: '名称',
         value: 'name',
         width: '25%',
       },
@@ -116,12 +116,12 @@ export default {
         width: '50%',
       },
       {
-        text: 'SSH Key',
+        text: 'SSH 秘钥',
         value: 'ssh_key_id',
         width: '25%',
       },
       {
-        text: 'Actions',
+        text: '操作',
         value: 'actions',
         sortable: false,
       }];

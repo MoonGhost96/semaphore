@@ -89,22 +89,22 @@ export default {
   methods: {
     getHeaders() {
       return [{
-        text: 'Name',
+        text: '名称',
         value: 'name',
         width: '33.33%',
       },
       {
-        text: 'Type',
+        text: '类型',
         value: 'type',
         width: '33.33%',
       },
       {
-        text: 'Path',
+        text: '路径',
         value: 'inventory',
         width: '33.33%',
       },
       {
-        text: 'Actions',
+        text: '操作',
         value: 'actions',
         sortable: false,
       }];

@@ -84,12 +84,12 @@ export default {
   methods: {
     getHeaders() {
       return [{
-        text: 'Name',
+        text: '名称',
         value: 'name',
         width: '100%',
       },
       {
-        text: 'Actions',
+        text: '操作',
         value: 'actions',
         sortable: false,
       }];

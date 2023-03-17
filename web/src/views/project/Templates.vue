@@ -388,46 +388,46 @@ export default {
     getHeaders() {
       return [
         {
-          text: 'Name',
+          text: '名称',
           value: 'name',
         },
         {
-          text: 'Version',
+          text: '版本',
           value: 'version',
           sortable: false,
         },
         {
-          text: 'Status',
+          text: '状态',
           value: 'status',
           sortable: false,
         },
         {
-          text: 'Last task',
+          text: '最后运行任务',
           value: 'last_task',
           sortable: false,
         },
         {
-          text: 'Playbook',
+          text: '剧本',
           value: 'playbook',
           sortable: false,
         },
         {
-          text: 'Inventory',
+          text: '资产目录',
           value: 'inventory_id',
           sortable: false,
         },
         {
-          text: 'Environment',
+          text: '环境变量',
           value: 'environment_id',
           sortable: false,
         },
         {
-          text: 'Repository',
+          text: '仓库',
           value: 'repository_id',
           sortable: false,
         },
         {
-          text: 'Actions',
+          text: '操作',
           value: 'actions',
           sortable: false,
           width: '0%',

@@ -93,25 +93,25 @@ export default {
     getHeaders() {
       return [
         {
-          text: 'Name',
+          text: '姓名',
           value: 'name',
           width: '50%',
         },
         {
-          text: 'Username',
+          text: '系统用户名',
           value: 'username',
         },
         {
-          text: 'Email',
+          text: '邮箱',
           value: 'email',
           width: '50%',
         },
         {
-          text: 'Admin',
+          text: '管理员',
           value: 'admin',
         },
         {
-          text: 'Actions',
+          text: '操作',
           value: 'actions',
           sortable: false,
         }];

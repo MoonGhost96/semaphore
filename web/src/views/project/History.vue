@@ -145,32 +145,32 @@ export default {
     getHeaders() {
       return [
         {
-          text: 'Task',
+          text: '任务',
           value: 'tpl_alias',
           sortable: false,
         },
         {
-          text: 'Version',
+          text: '版本',
           value: 'version',
           sortable: false,
         },
         {
-          text: 'Status',
+          text: '状态',
           value: 'status',
           sortable: false,
         },
         {
-          text: 'User',
+          text: '用户',
           value: 'user_name',
           sortable: false,
         },
         {
-          text: 'Start',
+          text: '开始时间',
           value: 'start',
           sortable: false,
         },
         {
-          text: 'Duration',
+          text: '运行时长',
           value: 'end',
           sortable: false,
         },

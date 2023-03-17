@@ -35,19 +35,19 @@ export default {
     getHeaders() {
       return [
         {
-          text: 'Time',
+          text: '时间',
           value: 'created',
           sortable: false,
           width: '20%',
         },
         {
-          text: 'User',
+          text: '用户',
           value: 'username',
           sortable: false,
           width: '10%',
         },
         {
-          text: 'Description',
+          text: '详情',
           value: 'description',
           sortable: false,
           width: '70%',
