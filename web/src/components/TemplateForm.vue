@@ -381,16 +381,48 @@ echo 'hello world'"
 /* eslint-disable import/no-extraneous-dependencies,import/extensions */
 
 import axios from 'axios';
-
+// 引入CodeMirror和基础样式
 import { codemirror } from 'vue-codemirror';
 import ItemFormBase from '@/components/ItemFormBase';
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/mode/vue/vue.js';
+// 支持JSON格式
 import 'codemirror/addon/lint/json-lint.js';
 import 'codemirror/addon/display/placeholder.js';
+// 明亮和暗黑主题
 import 'codemirror/theme/base16-dark.css';
 import 'codemirror/theme/base16-light.css';
+// shell支持
 import 'codemirror/mode/shell/shell.js';
+// JSON代码高亮需要由JavaScript插件支持
+import 'codemirror/mode/javascript/javascript.js';
+// 支持括号自动匹配
+import 'codemirror/addon/edit/matchbrackets.js';
+import 'codemirror/addon/edit/closebrackets.js';
+// 支持代码自动补全
+import 'codemirror/addon/hint/show-hint.css';
+import 'codemirror/addon/hint/show-hint.js';
+import 'codemirror/addon/hint/anyword-hint.js';
+// 行注释
+import 'codemirror/addon/comment/comment.js';
+// JSON错误检查
+import 'codemirror/addon/lint/lint.css';
+import 'codemirror/addon/lint/lint.js';
+// 搜索功能的依赖
+import 'codemirror/addon/dialog/dialog.js';
+import 'codemirror/addon/dialog/dialog.css';
+// 支持搜索功能
+import 'codemirror/addon/search/search';
+import 'codemirror/addon/search/searchcursor.js';
+// 支持各种代码折叠
+import 'codemirror/addon/fold/foldgutter.css';
+import 'codemirror/addon/fold/foldcode.js';
+import 'codemirror/addon/fold/foldgutter.js';
+import 'codemirror/addon/fold/brace-fold.js';
+import 'codemirror/addon/fold/comment-fold.js';
+// 支持代码区域全屏功能
+import 'codemirror/addon/display/fullscreen.css';
+import 'codemirror/addon/display/fullscreen.js';
 import { TEMPLATE_TYPE_ICONS, TEMPLATE_TYPE_TITLES, TEMPLATE_COMMAND_MODULES } from '@/lib/constants';
 import SurveyVars from './SurveyVars';
 
@@ -454,23 +486,47 @@ export default {
       return {
         tabSize: 2,
         mode: 'application/json',
+        styleActiveLine: true,
         lineNumbers: true,
         line: true,
-        lint: true,
         indentWithTabs: false,
         theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
+        // 括号匹配
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        // 开启代码折叠
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: [
+          'CodeMirror-linenumbers',
+          'CodeMirror-foldgutter',
+          'CodeMirror-lint-markers',
+        ],
       };
     },
 
     commandCmOptions() {
       return {
+        smartIndent: true,
         tabSize: 2,
         mode: 'shell',
+        styleActiveLine: true,
         lineNumbers: true,
         line: true,
         lint: true,
         indentWithTabs: false,
         theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
+        // 括号匹配
+        matchBrackets: true,
+        autoCloseBrackets: true,
+        // 开启代码折叠
+        lineWrapping: true,
+        foldGutter: true,
+        gutters: [
+          'CodeMirror-linenumbers',
+          'CodeMirror-foldgutter',
+          'CodeMirror-lint-markers',
+        ],
       };
     },
 
