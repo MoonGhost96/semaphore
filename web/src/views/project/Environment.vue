@@ -3,7 +3,7 @@
     <EditDialog
       v-model="editDialog"
       save-button-text="保存"
-      title="Edit Environment"
+      title="编辑环境"
       :max-width="500"
       @save="loadItems"
     >

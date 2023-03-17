@@ -13,8 +13,8 @@
 
     <v-text-field
       v-model="item.name"
-      label="Environment Name"
-      :rules="[v => !!v || 'Name 为必填项']"
+      label="环境名称"
+      :rules="[v => !!v || '名称为必填项']"
       required
       :disabled="formSaving"
       class="mb-4"

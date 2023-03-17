@@ -14,18 +14,18 @@
 
     <v-text-field
         v-model="item.name"
-        label="Name"
-        :rules="[v => !!v || 'Name 为必填项']"
+        label="仓库名称"
+        :rules="[v => !!v || '名称为必填项']"
         required
         :disabled="formSaving"
     ></v-text-field>
 
     <v-text-field
         v-model="item.git_url"
-        label="URL or path"
+        label="Git链接或本地路径"
         :rules="[
-          v => !!v || 'Repository 为必填项',
-          v => getTypeOfUrl(v) != null || 'Incorrect URL',
+          v => !!v || '仓库为必填项',
+          v => getTypeOfUrl(v) != null || '错误的URL',
         ]"
         required
         :disabled="formSaving"
@@ -57,19 +57,19 @@
 
     <v-text-field
       v-model="item.git_branch"
-      label="Branch"
-      :rules="[v => (!!v || type === 'local') || 'Branch 为必填项']"
+      label="分支"
+      :rules="[v => (!!v || type === 'local') || '分支为必填项']"
       required
       :disabled="formSaving || type === 'local'"
     ></v-text-field>
 
     <v-select
         v-model="item.ssh_key_id"
-        label="Access Key"
+        label="鉴权秘钥"
         :items="keys"
         item-value="id"
         item-text="name"
-        :rules="[v => !!v || 'Key 为必填项']"
+        :rules="[v => !!v || '秘钥为必填项']"
         required
         :disabled="formSaving"
     >

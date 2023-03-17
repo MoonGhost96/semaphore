@@ -14,16 +14,16 @@
 
     <v-text-field
         v-model="item.name"
-        label="Key Name"
-        :rules="[v => !!v || 'Name 为必填项']"
+        label="秘钥名称"
+        :rules="[v => !!v || '名称为必填项']"
         required
         :disabled="formSaving"
     />
 
     <v-select
         v-model="item.type"
-        label="Type"
-        :rules="[v => (!!v || !canEditSecrets) || 'Type 为必填项']"
+        label="类型"
+        :rules="[v => (!!v || !canEditSecrets) || '类型为必填项']"
         :items="inventoryTypes"
         item-value="id"
         item-text="name"

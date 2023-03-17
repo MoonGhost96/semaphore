@@ -3,8 +3,9 @@
     <EditDialog
       v-model="editDialog"
       :save-button-text="itemId === 'new' ? '创建' : '保存'"
-      :title="`${itemId === 'new' ? 'New' : '编辑'}仓库`"
+      :title="`${itemId === 'new' ? '创建' : '编辑'}仓库`"
       @save="loadItems()"
+      max-width="500"
     >
       <template v-slot:form="{ onSave, onError, needSave, needReset }">
         <RepositoryForm

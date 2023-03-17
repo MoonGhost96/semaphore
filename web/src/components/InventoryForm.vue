@@ -13,26 +13,26 @@
 
     <v-text-field
       v-model="item.name"
-      label="Name"
-      :rules="[v => !!v || 'Name 为必填项']"
+      label="名称"
+      :rules="[v => !!v || '名称为必填项']"
       required
       :disabled="formSaving"
     ></v-text-field>
 
     <v-select
       v-model="item.ssh_key_id"
-      label="User Credentials"
+      label="用户凭证"
       :items="keys"
       item-value="id"
       item-text="name"
-      :rules="[v => !!v || 'User Credentials 为必填项']"
+      :rules="[v => !!v || '用户凭证为必填项']"
       required
       :disabled="formSaving"
     ></v-select>
 
     <v-select
         v-model="item.become_key_id"
-        label="Sudo Credentials (Optional)"
+        label="Sudo凭证(可选)"
         clearable
         :items="loginPasswordKeys"
         item-value="id"
@@ -42,8 +42,8 @@
 
     <v-select
       v-model="item.type"
-      label="Type"
-      :rules="[v => !!v || 'Type 为必填项']"
+      label="类型"
+      :rules="[v => !!v || '类型为必填项']"
       :items="inventoryTypes"
       item-value="id"
       item-text="name"
