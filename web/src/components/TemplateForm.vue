@@ -399,10 +399,6 @@ import 'codemirror/mode/javascript/javascript.js';
 // 支持括号自动匹配
 import 'codemirror/addon/edit/matchbrackets.js';
 import 'codemirror/addon/edit/closebrackets.js';
-// 支持代码自动补全
-import 'codemirror/addon/hint/show-hint.css';
-import 'codemirror/addon/hint/show-hint.js';
-import 'codemirror/addon/hint/anyword-hint.js';
 // 行注释
 import 'codemirror/addon/comment/comment.js';
 // JSON错误检查
@@ -414,12 +410,6 @@ import 'codemirror/addon/dialog/dialog.css';
 // 支持搜索功能
 import 'codemirror/addon/search/search';
 import 'codemirror/addon/search/searchcursor.js';
-// 支持各种代码折叠
-import 'codemirror/addon/fold/foldgutter.css';
-import 'codemirror/addon/fold/foldcode.js';
-import 'codemirror/addon/fold/foldgutter.js';
-import 'codemirror/addon/fold/brace-fold.js';
-import 'codemirror/addon/fold/comment-fold.js';
 // 支持代码区域全屏功能
 import 'codemirror/addon/display/fullscreen.css';
 import 'codemirror/addon/display/fullscreen.js';
@@ -489,19 +479,10 @@ export default {
         styleActiveLine: true,
         lineNumbers: true,
         line: true,
-        indentWithTabs: false,
         theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
         // 括号匹配
         matchBrackets: true,
         autoCloseBrackets: true,
-        // 开启代码折叠
-        lineWrapping: true,
-        foldGutter: true,
-        gutters: [
-          'CodeMirror-linenumbers',
-          'CodeMirror-foldgutter',
-          'CodeMirror-lint-markers',
-        ],
       };
     },
 
@@ -514,19 +495,11 @@ export default {
         lineNumbers: true,
         line: true,
         lint: true,
-        indentWithTabs: false,
+        indentWithTabs: true,
         theme: this.$vuetify.theme.dark ? 'base16-dark' : 'base16-light',
         // 括号匹配
         matchBrackets: true,
         autoCloseBrackets: true,
-        // 开启代码折叠
-        lineWrapping: true,
-        foldGutter: true,
-        gutters: [
-          'CodeMirror-linenumbers',
-          'CodeMirror-foldgutter',
-          'CodeMirror-lint-markers',
-        ],
       };
     },
 
