@@ -60,6 +60,7 @@ func (t *TaskRunner) getRepoPath() string {
 		Logger:     t,
 		TemplateID: t.template.ID,
 		Repository: t.repository,
+		Client:     lib.CreateDefaultGitClient(),
 	}
 
 	return repo.GetFullPath()
@@ -476,6 +477,7 @@ func (t *TaskRunner) checkoutRepository() error {
 		Logger:     t,
 		TemplateID: t.template.ID,
 		Repository: t.repository,
+		Client:     lib.CreateDefaultGitClient(),
 	}
 
 	err := repo.ValidateRepo()
@@ -510,6 +512,7 @@ func (t *TaskRunner) updateRepository() error {
 		Logger:     t,
 		TemplateID: t.template.ID,
 		Repository: t.repository,
+		Client:     lib.CreateDefaultGitClient(),
 	}
 
 	err := repo.ValidateRepo()
