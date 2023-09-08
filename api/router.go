@@ -155,6 +155,9 @@ func Route() *mux.Router {
 	projectUserAPI.Path("/inventory").HandlerFunc(projects.GetInventory).Methods("GET", "HEAD")
 	projectUserAPI.Path("/inventory").HandlerFunc(projects.AddInventory).Methods("POST")
 
+	projectUserAPI.Path("/hosts").HandlerFunc(projects.GetHosts).Methods("GET", "HEAD")
+	projectUserAPI.Path("/hosts").HandlerFunc(projects.AddHost).Methods("POST")
+
 	projectUserAPI.Path("/environment").HandlerFunc(projects.GetEnvironment).Methods("GET", "HEAD")
 	projectUserAPI.Path("/environment").HandlerFunc(projects.AddEnvironment).Methods("POST")
 
@@ -212,6 +215,14 @@ func Route() *mux.Router {
 	projectInventoryManagement.HandleFunc("/{inventory_id}/refs", projects.GetInventoryRefs).Methods("GET", "HEAD")
 	projectInventoryManagement.HandleFunc("/{inventory_id}", projects.UpdateInventory).Methods("PUT")
 	projectInventoryManagement.HandleFunc("/{inventory_id}", projects.RemoveInventory).Methods("DELETE")
+
+	projectHostManagement := projectUserAPI.PathPrefix("/host").Subrouter()
+	projectHostManagement.Use(projects.HostMiddleware)
+
+	projectHostManagement.HandleFunc("/{host_id}", projects.GetHosts).Methods("GET", "HEAD")
+	projectHostManagement.HandleFunc("/{host_id}/refs", projects.GetHostRefs).Methods("GET", "HEAD")
+	projectHostManagement.HandleFunc("/{host_id}", projects.UpdateHost).Methods("PUT")
+	projectHostManagement.HandleFunc("/{host_id}", projects.RemoveHost).Methods("DELETE")
 
 	projectEnvManagement := projectUserAPI.PathPrefix("/environment").Subrouter()
 	projectEnvManagement.Use(projects.EnvironmentMiddleware)
