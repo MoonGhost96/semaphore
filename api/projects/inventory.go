@@ -45,7 +45,8 @@ func GetInventoryRefs(w http.ResponseWriter, r *http.Request) {
 	helpers.WriteJSON(w, http.StatusOK, refs)
 }
 
-// GetInventory returns an inventory from the database
+// GetInventory returns inventories from the database
+// todo 包装新结构，将inventory对应的hosts和db.Inventory包装到同一个结构体里返回
 func GetInventory(w http.ResponseWriter, r *http.Request) {
 	if inventory := context.Get(r, "inventory"); inventory != nil {
 		helpers.WriteJSON(w, http.StatusOK, inventory.(db.Inventory))
@@ -65,11 +66,13 @@ func GetInventory(w http.ResponseWriter, r *http.Request) {
 }
 
 // AddInventory creates an inventory in the database
+// todo 添加新的inventory时，type新增类型(host)，
 func AddInventory(w http.ResponseWriter, r *http.Request) {
 	project := context.Get(r, "project").(db.Project)
 
 	var inventory db.Inventory
 
+	// todo 将下面的inventory替换成新结构体，需要将hosts传进来
 	if !helpers.Bind(w, r, &inventory) {
 		return
 	}
@@ -82,7 +85,7 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	switch inventory.Type {
-	case db.InventoryStatic, db.InventoryStaticYaml, db.InventoryFile:
+	case db.InventoryStatic, db.InventoryStaticYaml, db.InventoryFile, db.InventoryHost:
 		break
 	default:
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]string{
@@ -92,6 +95,8 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	newInventory, err := helpers.Store(r).CreateInventory(inventory)
+	// todo 创建host类型的inventory时，添加关系表数据
+	// newHostInvRel, err := helpers.Store(r).CreateHostInvRel()
 
 	if err != nil {
 		helpers.WriteError(w, err)
@@ -143,6 +148,7 @@ func IsValidInventoryPath(path string) bool {
 func UpdateInventory(w http.ResponseWriter, r *http.Request) {
 	oldInventory := context.Get(r, "inventory").(db.Inventory)
 
+	// todo 同样需要包装新结构来更新host
 	var inventory db.Inventory
 
 	if !helpers.Bind(w, r, &inventory) {
@@ -191,6 +197,7 @@ func RemoveInventory(w http.ResponseWriter, r *http.Request) {
 	inventory := context.Get(r, "inventory").(db.Inventory)
 	var err error
 
+	// todo 删除关系表该inventory_id对应的项
 	err = helpers.Store(r).DeleteInventory(inventory.ProjectID, inventory.ID)
 	if err == db.ErrInvalidOperation {
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]interface{}{
