@@ -48,7 +48,7 @@ func InventoryMiddleware(next http.Handler) http.Handler {
 		}
 
 		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
-			QueryIdName:   "host_id",
+			QueryIdName:   "id",
 			QueryIdValues: hostIds,
 		})
 		if err != nil {
@@ -109,7 +109,8 @@ func GetInventory(w http.ResponseWriter, r *http.Request) {
 		}
 
 		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
-			QueryIdName:   "host_id",
+			// 注意下面QueryIdName要填成"id"，host表里没有host_id这一列
+			QueryIdName:   "id",
 			QueryIdValues: hostIds,
 		})
 		if err != nil {
@@ -164,7 +165,8 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 	// 如果inventoryModel.Type是绑定主机的新类型，添加关系表数据
 	if inventoryModel.Type == db.InventoryHost {
 		//todo 改成批量
-		for _, v := range inventoryModel.HostInvRels {
+		for i, v := range inventoryModel.HostInvRels {
+			inventoryModel.HostInvRels[i].InventoryId = newInventory.ID
 			_, err = helpers.Store(r).CreateHostInvRel(v)
 			if err != nil {
 				helpers.WriteError(w, err)

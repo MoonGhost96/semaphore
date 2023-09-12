@@ -256,7 +256,7 @@ var HostProps = ObjectProps{
 }
 
 var HostInvRelProps = ObjectProps{
-	TableName:             "project__host__inventory_rel",
+	TableName:             "project__host__inventory__rel",
 	Type:                  reflect.TypeOf(HostInventoryRel{}),
 	PrimaryColumnName:     "id",
 	ReferringColumnSuffix: "host_inv_rel_id",

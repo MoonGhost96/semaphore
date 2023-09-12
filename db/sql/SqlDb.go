@@ -9,6 +9,7 @@ import (
 	"github.com/go-gorp/gorp/v3"
 	_ "github.com/go-sql-driver/mysql" // imports mysql driver
 	"github.com/gobuffalo/packr"
+	"github.com/lib/pq"
 	_ "github.com/lib/pq"
 	"github.com/masterminds/squirrel"
 	"reflect"
@@ -216,10 +217,9 @@ func (d *SqlDb) getObjects(projectID int, props db.ObjectProps, params db.Retrie
 
 	if params.QueryIdName != "" && params.QueryIdValue != 0 {
 		q = q.Where("pe."+params.QueryIdName+"=?", params.QueryIdValue)
-	}
-
-	if params.QueryIdName != "" && params.QueryIdValues != nil {
-		q = q.Where("pe."+params.QueryIdName+"in (?)", params.QueryIdValues)
+	} else if params.QueryIdName != "" && params.QueryIdValues != nil {
+		//q = q.Where(squirrel.Expr("pe."+params.QueryIdName+" IN (?)", []interface{}{params.QueryIdValues}))
+		q = q.Where(squirrel.Expr("pe."+params.QueryIdName+" IN (?)", pq.Array(params.QueryIdValues)))
 	}
 
 	orderDirection := "ASC"
