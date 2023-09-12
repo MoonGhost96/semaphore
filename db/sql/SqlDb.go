@@ -218,6 +218,10 @@ func (d *SqlDb) getObjects(projectID int, props db.ObjectProps, params db.Retrie
 		q = q.Where("pe."+params.QueryIdName+"=?", params.QueryIdValue)
 	}
 
+	if params.QueryIdName != "" && params.QueryIdValues != nil {
+		q = q.Where("pe."+params.QueryIdName+"in (?)", params.QueryIdValues)
+	}
+
 	orderDirection := "ASC"
 	if params.SortInverted {
 		orderDirection = "DESC"

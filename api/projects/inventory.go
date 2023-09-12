@@ -4,6 +4,7 @@ import (
 	log "github.com/Sirupsen/logrus"
 	"github.com/ansible-semaphore/semaphore/api/helpers"
 	"github.com/ansible-semaphore/semaphore/db"
+	"github.com/ansible-semaphore/semaphore/model"
 	"net/http"
 
 	"os"
@@ -22,20 +23,48 @@ func InventoryMiddleware(next http.Handler) http.Handler {
 			return
 		}
 
-		inventory, err := helpers.Store(r).GetInventory(project.ID, inventoryID)
-
+		inventoryDB, err := helpers.Store(r).GetInventory(project.ID, inventoryID)
 		if err != nil {
 			helpers.WriteError(w, err)
 			return
 		}
 
-		context.Set(r, "inventory", inventory)
+		var hostInvRels []db.HostInventoryRel
+		hostInvRels, err = helpers.Store(r).GetHostInvRels(project.ID, db.RetrieveQueryParams{
+			QueryIdName:  "inventory_id",
+			QueryIdValue: inventoryID,
+		})
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+
+		var hostIds []int
+		var hosts []db.Host
+
+		for _, v := range hostInvRels {
+			hostId := v.HostId
+			hostIds = append(hostIds, hostId)
+		}
+
+		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
+			QueryIdName:   "host_id",
+			QueryIdValues: hostIds,
+		})
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+
+		inventoryModel := model.ConvertInvDB2InvModel(inventoryDB, hostInvRels, hosts)
+
+		context.Set(r, "inventory", inventoryModel)
 		next.ServeHTTP(w, r)
 	})
 }
 
 func GetInventoryRefs(w http.ResponseWriter, r *http.Request) {
-	inventory := context.Get(r, "inventory").(db.Inventory)
+	inventory := context.Get(r, "inventory").(model.Inventory)
 	refs, err := helpers.Store(r).GetInventoryRefs(inventory.ProjectID, inventory.ID)
 	if err != nil {
 		helpers.WriteError(w, err)
@@ -46,16 +75,50 @@ func GetInventoryRefs(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetInventory returns inventories from the database
-// todo 包装新结构，将inventory对应的hosts和db.Inventory包装到同一个结构体里返回
 func GetInventory(w http.ResponseWriter, r *http.Request) {
 	if inventory := context.Get(r, "inventory"); inventory != nil {
-		helpers.WriteJSON(w, http.StatusOK, inventory.(db.Inventory))
+		helpers.WriteJSON(w, http.StatusOK, inventory.(model.Inventory))
 		return
 	}
 
 	project := context.Get(r, "project").(db.Project)
 
-	inventories, err := helpers.Store(r).GetInventories(project.ID, helpers.QueryParams(r.URL))
+	var inventories []model.Inventory
+
+	inventoriesDB, err := helpers.Store(r).GetInventories(project.ID, helpers.QueryParams(r.URL))
+	for _, v := range inventoriesDB {
+		if v.Type != db.InventoryHost {
+			inventories = append(inventories, model.ConvertInvDB2InvModel(v, nil, nil))
+			continue
+		}
+		var hostInvRels []db.HostInventoryRel
+		var hosts []db.Host
+		var hostIds []int
+		hostInvRels, err = helpers.Store(r).GetHostInvRels(v.ProjectID, db.RetrieveQueryParams{
+			QueryIdName:  "inventory_id",
+			QueryIdValue: v.ID,
+		})
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+
+		for _, hostInvRel := range hostInvRels {
+			hostId := hostInvRel.HostId
+			hostIds = append(hostIds, hostId)
+		}
+
+		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
+			QueryIdName:   "host_id",
+			QueryIdValues: hostIds,
+		})
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+
+		inventories = append(inventories, model.ConvertInvDB2InvModel(v, hostInvRels, hosts))
+	}
 
 	if err != nil {
 		helpers.WriteError(w, err)
@@ -66,25 +129,23 @@ func GetInventory(w http.ResponseWriter, r *http.Request) {
 }
 
 // AddInventory creates an inventory in the database
-// todo 添加新的inventory时，type新增类型(host)，
 func AddInventory(w http.ResponseWriter, r *http.Request) {
 	project := context.Get(r, "project").(db.Project)
 
-	var inventory db.Inventory
+	var inventoryModel model.Inventory
 
-	// todo 将下面的inventory替换成新结构体，需要将hosts传进来
-	if !helpers.Bind(w, r, &inventory) {
+	if !helpers.Bind(w, r, &inventoryModel) {
 		return
 	}
 
-	if inventory.ProjectID != project.ID {
+	if inventoryModel.ProjectID != project.ID {
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "Project ID in body and URL must be the same",
 		})
 		return
 	}
 
-	switch inventory.Type {
+	switch inventoryModel.Type {
 	case db.InventoryStatic, db.InventoryStaticYaml, db.InventoryFile, db.InventoryHost:
 		break
 	default:
@@ -94,19 +155,28 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	newInventory, err := helpers.Store(r).CreateInventory(inventory)
-	// todo 创建host类型的inventory时，添加关系表数据
-	// newHostInvRel, err := helpers.Store(r).CreateHostInvRel()
-
+	inventoryDB := model.ConvertInvModel2InvDB(inventoryModel)
+	newInventory, err := helpers.Store(r).CreateInventory(inventoryDB)
 	if err != nil {
 		helpers.WriteError(w, err)
 		return
+	}
+	// 如果inventoryModel.Type是绑定主机的新类型，添加关系表数据
+	if inventoryModel.Type == db.InventoryHost {
+		//todo 改成批量
+		for _, v := range inventoryModel.HostInvRels {
+			_, err = helpers.Store(r).CreateHostInvRel(v)
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
+		}
 	}
 
 	user := context.Get(r, "user").(*db.User)
 
 	objType := db.EventInventory
-	desc := "Inventory " + inventory.Name + " created"
+	desc := "Inventory " + inventoryModel.Name + " created"
 	_, err = helpers.Store(r).CreateEvent(db.Event{
 		UserID:      &user.ID,
 		ProjectID:   &project.ID,
@@ -146,34 +216,33 @@ func IsValidInventoryPath(path string) bool {
 
 // UpdateInventory writes updated values to an existing inventory item in the database
 func UpdateInventory(w http.ResponseWriter, r *http.Request) {
-	oldInventory := context.Get(r, "inventory").(db.Inventory)
+	oldInventoryModel := context.Get(r, "inventory").(model.Inventory)
 
-	// todo 同样需要包装新结构来更新host
-	var inventory db.Inventory
+	var inventoryModel model.Inventory
 
-	if !helpers.Bind(w, r, &inventory) {
+	if !helpers.Bind(w, r, &inventoryModel) {
 		return
 	}
 
-	if inventory.ID != oldInventory.ID {
+	if inventoryModel.ID != oldInventoryModel.ID {
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "Inventory ID in body and URL must be the same",
 		})
 		return
 	}
 
-	if inventory.ProjectID != oldInventory.ProjectID {
+	if inventoryModel.ProjectID != oldInventoryModel.ProjectID {
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]string{
 			"error": "Project ID in body and URL must be the same",
 		})
 		return
 	}
 
-	switch inventory.Type {
-	case db.InventoryStatic, db.InventoryStaticYaml:
+	switch inventoryModel.Type {
+	case db.InventoryStatic, db.InventoryStaticYaml, db.InventoryHost:
 		break
 	case db.InventoryFile:
-		if !IsValidInventoryPath(inventory.Inventory) {
+		if !IsValidInventoryPath(inventoryModel.Inventory) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
@@ -182,11 +251,22 @@ func UpdateInventory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	err := helpers.Store(r).UpdateInventory(inventory)
+	inventoryDB := model.ConvertInvModel2InvDB(inventoryModel)
+	err := helpers.Store(r).UpdateInventory(inventoryDB)
 
 	if err != nil {
 		helpers.WriteError(w, err)
 		return
+	}
+
+	if inventoryModel.Type == db.InventoryHost {
+		for _, v := range inventoryModel.HostInvRels {
+			err = helpers.Store(r).UpdateHostInvRel(v)
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
+		}
 	}
 
 	w.WriteHeader(http.StatusNoContent)
@@ -194,11 +274,10 @@ func UpdateInventory(w http.ResponseWriter, r *http.Request) {
 
 // RemoveInventory deletes an inventory from the database
 func RemoveInventory(w http.ResponseWriter, r *http.Request) {
-	inventory := context.Get(r, "inventory").(db.Inventory)
+	inventoryModel := context.Get(r, "inventory").(model.Inventory)
 	var err error
 
-	// todo 删除关系表该inventory_id对应的项
-	err = helpers.Store(r).DeleteInventory(inventory.ProjectID, inventory.ID)
+	err = helpers.Store(r).DeleteInventory(inventoryModel.ProjectID, inventoryModel.ID)
 	if err == db.ErrInvalidOperation {
 		helpers.WriteJSON(w, http.StatusBadRequest, map[string]interface{}{
 			"error": "Inventory is in use by one or more templates",
@@ -212,13 +291,32 @@ func RemoveInventory(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	desc := "Inventory " + inventory.Name + " deleted"
+	// 1 删除host_inv_rel关系表中该inventory_id对应的项
+	// 1.1 先查询该inventoryId与哪些host关联
+	hostInvRels, err := helpers.Store(r).GetHostInvRels(inventoryModel.ProjectID, db.RetrieveQueryParams{
+		QueryIdName:  "inventory_id",
+		QueryIdValue: inventoryModel.ID,
+	})
+	if err != nil {
+		helpers.WriteError(w, err)
+		return
+	}
+	// 1.2 遍历删除Host_Inv_Rel表中当前project下所有关联该inventory的信息
+	for _, v := range hostInvRels {
+		err = helpers.Store(r).DeleteHostInvRel(inventoryModel.ProjectID, v.ID)
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+	}
+
+	desc := "Inventory " + inventoryModel.Name + " deleted"
 
 	user := context.Get(r, "user").(*db.User)
 
 	_, err = helpers.Store(r).CreateEvent(db.Event{
 		UserID:      &user.ID,
-		ProjectID:   &inventory.ProjectID,
+		ProjectID:   &inventoryModel.ProjectID,
 		Description: &desc,
 	})
 

@@ -34,12 +34,13 @@ func ObjectToJSON(obj interface{}) *string {
 }
 
 type RetrieveQueryParams struct {
-	Offset       int
-	Count        int
-	SortBy       string
-	SortInverted bool
-	QueryIdName  string
-	QueryIdValue int
+	Offset        int
+	Count         int
+	SortBy        string
+	SortInverted  bool
+	QueryIdName   string
+	QueryIdValue  int
+	QueryIdValues []int
 }
 
 type ObjectReferrer struct {

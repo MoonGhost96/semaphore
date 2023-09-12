@@ -33,7 +33,7 @@ func (d *SqlDb) UpdateHost(host db.Host) error {
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		host.SSHKey,
+		*host.SSHKey,
 		host.ID)
 
 	return err
@@ -49,7 +49,7 @@ func (d *SqlDb) CreateHost(host db.Host) (newHost db.Host, err error) {
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		host.SSHKey)
+		*host.SSHKey)
 
 	if err != nil {
 		return
