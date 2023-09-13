@@ -268,11 +268,20 @@ func UpdateInventory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if inventoryModel.Type == db.InventoryHost {
+		// Todo 目前采取全量更新的形式，后续考虑改为增量
 		for _, v := range inventoryModel.HostInvRels {
-			err = helpers.Store(r).UpdateHostInvRel(v)
-			if err != nil {
-				helpers.WriteError(w, err)
-				return
+			if v.ID != 0 {
+				err = helpers.Store(r).UpdateHostInvRel(v)
+				if err != nil {
+					helpers.WriteError(w, err)
+					return
+				}
+			} else {
+				_, err = helpers.Store(r).CreateHostInvRel(v)
+				if err != nil {
+					helpers.WriteError(w, err)
+					return
+				}
 			}
 		}
 	}
