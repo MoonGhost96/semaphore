@@ -47,13 +47,16 @@ func InventoryMiddleware(next http.Handler) http.Handler {
 			hostIds = append(hostIds, hostId)
 		}
 
-		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
-			QueryIdName:   "id",
-			QueryIdValues: hostIds,
-		})
-		if err != nil {
-			helpers.WriteError(w, err)
-			return
+		// 目前如果hostIds传空，会查host表的所有host
+		if hostIds != nil {
+			hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
+				QueryIdName:   "id",
+				QueryIdValues: hostIds,
+			})
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
 		}
 
 		inventoryModel := model.ConvertInvDB2InvModel(inventoryDB, hostInvRels, hosts)
@@ -108,14 +111,16 @@ func GetInventory(w http.ResponseWriter, r *http.Request) {
 			hostIds = append(hostIds, hostId)
 		}
 
-		hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
-			// 注意下面QueryIdName要填成"id"，host表里没有host_id这一列
-			QueryIdName:   "id",
-			QueryIdValues: hostIds,
-		})
-		if err != nil {
-			helpers.WriteError(w, err)
-			return
+		if hostIds != nil {
+			hosts, err = helpers.Store(r).GetHosts(project.ID, db.RetrieveQueryParams{
+				// 注意下面QueryIdName要填成"id"，host表里没有host_id这一列
+				QueryIdName:   "id",
+				QueryIdValues: hostIds,
+			})
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
 		}
 
 		inventories = append(inventories, model.ConvertInvDB2InvModel(v, hostInvRels, hosts))
@@ -157,7 +162,7 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	inventoryDB := model.ConvertInvModel2InvDB(inventoryModel)
-	newInventory, err := helpers.Store(r).CreateInventory(inventoryDB)
+	newInventoryDB, err := helpers.Store(r).CreateInventory(inventoryDB)
 	if err != nil {
 		helpers.WriteError(w, err)
 		return
@@ -165,9 +170,9 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 	// 如果inventoryModel.Type是绑定主机的新类型，添加关系表数据
 	if inventoryModel.Type == db.InventoryHost {
 		//todo 改成批量
-		for i, v := range inventoryModel.HostInvRels {
-			inventoryModel.HostInvRels[i].InventoryId = newInventory.ID
-			_, err = helpers.Store(r).CreateHostInvRel(v)
+		for i, _ := range inventoryModel.HostInvRels {
+			inventoryModel.HostInvRels[i].InventoryId = newInventoryDB.ID
+			_, err = helpers.Store(r).CreateHostInvRel(inventoryModel.HostInvRels[i])
 			if err != nil {
 				helpers.WriteError(w, err)
 				return
@@ -183,7 +188,7 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 		UserID:      &user.ID,
 		ProjectID:   &project.ID,
 		ObjectType:  &objType,
-		ObjectID:    &newInventory.ID,
+		ObjectID:    &newInventoryDB.ID,
 		Description: &desc,
 	})
 
@@ -192,7 +197,8 @@ func AddInventory(w http.ResponseWriter, r *http.Request) {
 		log.Error(err)
 	}
 
-	helpers.WriteJSON(w, http.StatusCreated, newInventory)
+	// 此处没有修改成返回Model结构，感觉没必要返回对象的
+	helpers.WriteJSON(w, http.StatusCreated, newInventoryDB)
 }
 
 // IsValidInventoryPath tests a path to ensure it is below the cwd
