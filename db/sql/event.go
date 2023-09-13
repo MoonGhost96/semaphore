@@ -32,7 +32,6 @@ func (d *SqlDb) getEvents(q squirrel.SelectBuilder, params db.RetrieveQueryParam
 
 func (d *SqlDb) CreateEvent(evt db.Event) (newEvent db.Event, err error) {
 	// 调整时间为东八区
-	// todo 调整失败，还无法显示正确东八区时间，寄
 	loc, err := time.LoadLocation("Asia/Shanghai")
 	if err != nil {
 		fmt.Println("获取时区对象失败：", err)
