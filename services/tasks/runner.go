@@ -269,6 +269,9 @@ func (t *TaskRunner) run() {
 		t.updateStatus()
 		t.createTaskEvent()
 		t.destroyKeys()
+		// 删除inventory-host类型的临时文件（其中存有host的账密信息）
+		tmpInventoryPath := util.Config.TmpPath + "/inventory_" + strconv.Itoa(t.task.ID)
+		_ = os.Remove(tmpInventoryPath)
 	}()
 
 	// TODO: more details
@@ -723,7 +726,7 @@ func (t *TaskRunner) getPlaybookArgs() (args []string, err error) {
 	switch t.inventory.Type {
 	case db.InventoryFile:
 		inventory = t.inventory.Inventory
-	case db.InventoryStatic, db.InventoryStaticYaml:
+	case db.InventoryStatic, db.InventoryStaticYaml, db.InventoryHost:
 		inventory = util.Config.TmpPath + "/inventory_" + strconv.Itoa(t.task.ID)
 		if t.inventory.Type == db.InventoryStaticYaml {
 			inventory += ".yml"
