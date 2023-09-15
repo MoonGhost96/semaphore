@@ -268,20 +268,31 @@ func UpdateInventory(w http.ResponseWriter, r *http.Request) {
 	}
 
 	if inventoryModel.Type == db.InventoryHost {
-		// Todo 目前采取全量更新的形式，后续考虑改为增量
+		// 全量更新，先删除关系表中所有的旧关系，再创建新关系，在每个inventory关联的host较少时可行，如果关联的host很多，需要改成增量形式
+		// 先删除旧的
+		var hostInvRels []db.HostInventoryRel
+		hostInvRels, err = helpers.Store(r).GetHostInvRels(inventoryModel.ProjectID, db.RetrieveQueryParams{
+			QueryIdName:  "inventory_id",
+			QueryIdValue: inventoryModel.ID,
+		})
+		if err != nil {
+			helpers.WriteError(w, err)
+			return
+		}
+
+		for _, v := range hostInvRels {
+			err = helpers.Store(r).DeleteHostInvRel(inventoryModel.ProjectID, v.ID)
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
+			}
+		}
+		// 再创建新的
 		for _, v := range inventoryModel.HostInvRels {
-			if v.ID != 0 {
-				err = helpers.Store(r).UpdateHostInvRel(v)
-				if err != nil {
-					helpers.WriteError(w, err)
-					return
-				}
-			} else {
-				_, err = helpers.Store(r).CreateHostInvRel(v)
-				if err != nil {
-					helpers.WriteError(w, err)
-					return
-				}
+			_, err = helpers.Store(r).CreateHostInvRel(v)
+			if err != nil {
+				helpers.WriteError(w, err)
+				return
 			}
 		}
 	}
