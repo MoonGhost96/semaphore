@@ -33,12 +33,13 @@ func (d *SqlDb) UpdateHost(host db.Host) error {
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		host.SSHKey,
+		*host.SSHKey,
 		host.ID)
 
 	return err
 }
 
+// Todo 保存密码不能明文，需要加解密的步骤，
 func (d *SqlDb) CreateHost(host db.Host) (newHost db.Host, err error) {
 	insertID, err := d.insert(
 		"id",
@@ -48,7 +49,7 @@ func (d *SqlDb) CreateHost(host db.Host) (newHost db.Host, err error) {
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		host.SSHKey)
+		*host.SSHKey)
 
 	if err != nil {
 		return

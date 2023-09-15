@@ -216,6 +216,8 @@ func (d *SqlDb) getObjects(projectID int, props db.ObjectProps, params db.Retrie
 
 	if params.QueryIdName != "" && params.QueryIdValue != 0 {
 		q = q.Where("pe."+params.QueryIdName+"=?", params.QueryIdValue)
+	} else if params.QueryIdName != "" && params.QueryIdValues != nil {
+		q = q.Where(squirrel.Eq{"pe." + params.QueryIdName: params.QueryIdValues})
 	}
 
 	orderDirection := "ASC"

@@ -359,6 +359,7 @@ func (d *DbConfig) GetConnectionString(includeDbName bool) (connectionString str
 		options := map[string]string{
 			"parseTime":         "true",
 			"interpolateParams": "true",
+			"loc":               "Local",
 		}
 		for v, k := range d.Options {
 			options[v] = k
