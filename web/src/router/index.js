@@ -8,6 +8,7 @@ import TemplateView from '../views/project/TemplateView.vue';
 import Environment from '../views/project/Environment.vue';
 import Inventory from '../views/project/Inventory.vue';
 import Keys from '../views/project/Keys.vue';
+import Host from '../views/project/Host.vue';
 import Repositories from '../views/project/Repositories.vue';
 import Team from '../views/project/Team.vue';
 import Users from '../views/Users.vue';
@@ -72,6 +73,10 @@ const routes = [
   {
     path: '/project/:projectId/keys',
     component: Keys,
+  },
+  {
+    path: '/project/:projectId/host',
+    component: Host,
   },
   {
     path: '/project/:projectId/team',
