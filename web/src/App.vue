@@ -229,6 +229,16 @@
           </v-list-item-content>
         </v-list-item>
 
+        <v-list-item key="host" :to="`/project/${projectId}/host`">
+          <v-list-item-icon>
+            <v-icon>mdi-server</v-icon>
+          </v-list-item-icon>
+
+          <v-list-item-content>
+            <v-list-item-title>主机管理/Hosts</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+
         <v-list-item key="environment" :to="`/project/${projectId}/environment`">
           <v-list-item-icon>
             <v-icon>mdi-code-braces</v-icon>

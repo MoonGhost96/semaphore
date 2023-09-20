@@ -155,8 +155,8 @@ func Route() *mux.Router {
 	projectUserAPI.Path("/inventory").HandlerFunc(projects.GetInventory).Methods("GET", "HEAD")
 	projectUserAPI.Path("/inventory").HandlerFunc(projects.AddInventory).Methods("POST")
 
-	projectUserAPI.Path("/hosts").HandlerFunc(projects.GetHosts).Methods("GET", "HEAD")
-	projectUserAPI.Path("/hosts").HandlerFunc(projects.AddHost).Methods("POST")
+	projectUserAPI.Path("/host").HandlerFunc(projects.GetHosts).Methods("GET", "HEAD")
+	projectUserAPI.Path("/host").HandlerFunc(projects.AddHost).Methods("POST")
 
 	projectUserAPI.Path("/environment").HandlerFunc(projects.GetEnvironment).Methods("GET", "HEAD")
 	projectUserAPI.Path("/environment").HandlerFunc(projects.AddEnvironment).Methods("POST")
