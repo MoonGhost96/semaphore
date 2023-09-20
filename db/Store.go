@@ -34,10 +34,13 @@ func ObjectToJSON(obj interface{}) *string {
 }
 
 type RetrieveQueryParams struct {
-	Offset       int
-	Count        int
-	SortBy       string
-	SortInverted bool
+	Offset        int
+	Count         int
+	SortBy        string
+	SortInverted  bool
+	QueryIdName   string
+	QueryIdValue  int
+	QueryIdValues []int
 }
 
 type ObjectReferrer struct {
@@ -113,6 +116,20 @@ type Store interface {
 	UpdateInventory(inventory Inventory) error
 	CreateInventory(inventory Inventory) (Inventory, error)
 	DeleteInventory(projectID int, inventoryID int) error
+
+	GetHost(projectID int, hostId int) (Host, error)
+	GetHostRefs(projectId int, hostId int) (ObjectReferrers, error)
+	GetHosts(projectId int, params RetrieveQueryParams) ([]Host, error)
+	UpdateHost(host Host) error
+	CreateHost(host Host) (Host, error)
+	DeleteHost(projectId int, hostId int) error
+
+	GetHostInvRel(projectID int, hostInvRelId int) (HostInventoryRel, error)
+	GetHostInvRelRefs(projectId int, hostInvRelId int) (ObjectReferrers, error)
+	GetHostInvRels(projectId int, params RetrieveQueryParams) ([]HostInventoryRel, error)
+	UpdateHostInvRel(hostInvRel HostInventoryRel) error
+	CreateHostInvRel(hostInvRel HostInventoryRel) (HostInventoryRel, error)
+	DeleteHostInvRel(projectId int, hostInvRelId int) error
 
 	GetRepository(projectID int, repositoryID int) (Repository, error)
 	GetRepositoryRefs(projectID int, repositoryID int) (ObjectReferrers, error)
@@ -227,6 +244,24 @@ var InventoryProps = ObjectProps{
 	ReferringColumnSuffix: "inventory_id",
 	SortableColumns:       []string{"name"},
 	DefaultSortingColumn:  "name",
+}
+
+var HostProps = ObjectProps{
+	TableName:             "project__host",
+	Type:                  reflect.TypeOf(Host{}),
+	PrimaryColumnName:     "id",
+	ReferringColumnSuffix: "host_id",
+	SortableColumns:       []string{"name"},
+	DefaultSortingColumn:  "name",
+}
+
+var HostInvRelProps = ObjectProps{
+	TableName:             "project__host__inventory__rel",
+	Type:                  reflect.TypeOf(HostInventoryRel{}),
+	PrimaryColumnName:     "id",
+	ReferringColumnSuffix: "host_inv_rel_id",
+	SortableColumns:       []string{"host_id", "inventory_id"},
+	DefaultSortingColumn:  "host_id",
 }
 
 var RepositoryProps = ObjectProps{
