@@ -214,6 +214,12 @@ func (d *SqlDb) getObjects(projectID int, props db.ObjectProps, params db.Retrie
 		From(props.TableName+" pe").
 		Where("pe.project_id=?", projectID)
 
+	if params.QueryIdName != "" && params.QueryIdValue != 0 {
+		q = q.Where("pe."+params.QueryIdName+"=?", params.QueryIdValue)
+	} else if params.QueryIdName != "" && params.QueryIdValues != nil {
+		q = q.Where(squirrel.Eq{"pe." + params.QueryIdName: params.QueryIdValues})
+	}
+
 	orderDirection := "ASC"
 	if params.SortInverted {
 		orderDirection = "DESC"
@@ -299,6 +305,8 @@ func (d *SqlDb) Connect(token string) {
 	d.sql.AddTableWithName(db.AccessKey{}, "access_key").SetKeys(true, "id")
 	d.sql.AddTableWithName(db.Environment{}, "project__environment").SetKeys(true, "id")
 	d.sql.AddTableWithName(db.Inventory{}, "project__inventory").SetKeys(true, "id")
+	d.sql.AddTableWithName(db.Host{}, "project__host").SetKeys(true, "id")
+	d.sql.AddTableWithName(db.HostInventoryRel{}, "project__host__inventory__rel").SetKeys(true, "id")
 	d.sql.AddTableWithName(db.Project{}, "project").SetKeys(true, "id")
 	d.sql.AddTableWithName(db.Repository{}, "project__repository").SetKeys(true, "id")
 	d.sql.AddTableWithName(db.Task{}, "task").SetKeys(true, "id")

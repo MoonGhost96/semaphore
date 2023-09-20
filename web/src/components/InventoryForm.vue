@@ -60,6 +60,12 @@
       v-if="item.type === 'file'"
     ></v-text-field>
 
+    <v-checkbox
+      v-model="item.host_inv_rels"
+      label="Host List"
+      v-if="item.type === 'host'"
+    />
+
     <codemirror
         :style="{ border: '1px solid lightgray' }"
         v-model="item.inventory"
@@ -141,6 +147,9 @@ export default {
       }, {
         id: 'file',
         name: 'File',
+      }, {
+        id: 'host',
+        name: 'Host',
       }],
     };
   },

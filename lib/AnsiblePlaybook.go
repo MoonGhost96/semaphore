@@ -15,6 +15,7 @@ type AnsiblePlaybook struct {
 	Logger     Logger
 }
 
+// 拼接命令的地方
 func (p AnsiblePlaybook) makeCmd(command string, args []string, environmentVars *[]string) *exec.Cmd {
 	cmd := exec.Command(command, args...) //nolint: gas
 	cmd.Dir = p.GetFullPath()

@@ -4,6 +4,7 @@ const (
 	InventoryStatic     = "static"
 	InventoryStaticYaml = "static-yaml"
 	InventoryFile       = "file"
+	InventoryHost       = "host"
 )
 
 // Inventory is the model of an ansible inventory file
