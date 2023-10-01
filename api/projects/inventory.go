@@ -86,7 +86,7 @@ func GetInventory(w http.ResponseWriter, r *http.Request) {
 
 	project := context.Get(r, "project").(db.Project)
 
-	var inventories []model.Inventory
+	inventories := make([]model.Inventory, 0)
 
 	inventoriesDB, err := helpers.Store(r).GetInventories(project.ID, helpers.QueryParams(r.URL))
 	for _, v := range inventoriesDB {

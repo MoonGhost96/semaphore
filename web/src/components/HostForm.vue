@@ -21,7 +21,7 @@
     />
 
     <v-text-field
-      v-model="item.host_IP"
+      v-model="item.host_ip"
       label="Host IP"
       :rules="[v => !!v || 'IP 为必填项']"
       required

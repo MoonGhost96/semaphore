@@ -28,12 +28,11 @@ func (d *SqlDb) DeleteHost(projectID int, hostID int) error {
 
 func (d *SqlDb) UpdateHost(host db.Host) error {
 	_, err := d.exec(
-		"update project__host set name=?, host_ip=?, user_name=?, password=?, sshKey=? where id=?",
+		"update project__host set name=?, host_ip=?, user_name=?, password=? where id=?",
 		host.Name,
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		*host.SSHKey,
 		host.ID)
 
 	return err
@@ -43,13 +42,13 @@ func (d *SqlDb) UpdateHost(host db.Host) error {
 func (d *SqlDb) CreateHost(host db.Host) (newHost db.Host, err error) {
 	insertID, err := d.insert(
 		"id",
-		"insert into project__host (project_id, name, host_ip, user_name, password, sshKey) values (?, ?, ?, ?, ?, ?)",
+		"insert into project__host (project_id, name, host_ip, user_name, password) values (?, ?, ?, ?, ?)",
 		host.ProjectID,
 		host.Name,
 		host.HostIP,
 		host.UserName,
 		host.Password,
-		*host.SSHKey)
+	)
 
 	if err != nil {
 		return

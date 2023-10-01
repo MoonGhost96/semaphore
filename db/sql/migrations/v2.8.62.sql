@@ -5,9 +5,9 @@ create table if not exists semaphore.project__host (
     name varchar(255) NOT NULL,
     user_name varchar(255) NOT NULL,
     password varchar(255) NOT NULL,
-    sshKey text,
+    host_ip varchar(255) NOT NULL,
     KEY project__host__index (project_id),
-    KEY project__host_ip_index (name) USING BTREE,
+    KEY project__host_ip_index (host_ip) USING BTREE,
     CONSTRAINT project__host_project_id_fk FOREIGN KEY (project_id) REFERENCES semaphore.project (id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 

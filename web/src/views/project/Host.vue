@@ -94,7 +94,7 @@ export default {
       },
       {
         text: 'IP',
-        value: 'host_IP',
+        value: 'host_ip',
         width: '25%',
       },
       {
