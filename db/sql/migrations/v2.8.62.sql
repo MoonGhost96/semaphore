@@ -12,7 +12,7 @@ create table if not exists semaphore.project__host (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
-create table if not exists semaphore.project__host__inventory_rel (
+create table if not exists semaphore.project__host__inventory__rel (
     id int(11) unsigned NOT NULL AUTO_INCREMENT
         primary key ,
     project_id int(11) NOT NULL,
